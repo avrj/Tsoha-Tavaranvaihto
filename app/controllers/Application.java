@@ -22,7 +22,7 @@ public class Application extends Controller {
 
         try {
             //Alustetaan muuttuja jossa on Select-kysely, joka palauttaa lukuarvon:
-            String sqlkysely = "SELECT COUNT(*) FROM User as two";
+            String sqlkysely = "SELECT COUNT(*) FROM Users as two";
 
             kysely = connection.prepareStatement(sqlkysely);
             tulokset = kysely.executeQuery();
