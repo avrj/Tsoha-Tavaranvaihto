@@ -1,4 +1,4 @@
-name := """testi"""
+name := """tsoha-tavaranvaihto"""
 
 version := "1.0-SNAPSHOT"
 
