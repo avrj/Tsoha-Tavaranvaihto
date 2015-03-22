@@ -1,0 +1,43 @@
+@(loginForm: Form[LoginForm])
+
+@main_template("Tavaranvaihto") {
+<br/>
+
+@if(flash.contains("success")) {
+<div class="alert alert-success" role="alert">@flash.get("success")</div>
+}
+
+@if(flash.contains("info")) {
+<div class="alert alert-info" role="alert">@flash.get("info")</div>
+}
+
+@if(flash.contains("error")) {
+<div class="alert alert-danger" role="alert">@flash.get("error")</div>
+}
+
+@if(loginForm.hasGlobalErrors) {
+<div class="alert alert-danger">
+    @loginForm.globalError.message
+</div>
+}
+
+<div class="login-panel panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Kirjaudu</h3>
+    </div>
+    <div class="panel-body">
+        @helper.form(action = routes.SessionController.login(), 'role -> "form") {
+        <div class="form-group">
+            @helper.inputText(loginForm("username"), 'class -> "form-control", 'autofocus -> "", '_showConstraints ->
+            false, '_label -> "Käyttäjätunnus")
+        </div>
+        <div class="form-group">
+            @helper.inputPassword(loginForm("password"), 'class -> "form-control", '_showConstraints -> false, '_label
+            -> "Salasana")
+        </div>
+
+        <button class="btn btn-sm btn-success">Kirjaudu</button>
+        }
+    </div>
+</div>
+}
