@@ -32,8 +32,9 @@ CREATE TABLE CounterOffer (
   id SERIAL PRIMARY KEY,
   customer_id INTEGER REFERENCES Customer(id),
   item_id INTEGER REFERENCES Item(id),
-  description text,
+  description text
 );
+
 # --- !Downs
  
 DROP TABLE IF EXISTS Customer CASCADE;
