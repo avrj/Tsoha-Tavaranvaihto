@@ -3,7 +3,21 @@
 # ~~~~
 
 # Home page
-GET     /                           controllers.Application.index()
+GET     /                           controllers.ApplicationController.index()
+
+GET /login                          controllers.SessionController.index()
+POST /session                         controllers.SessionController.login()
+
+GET /logout                      controllers.SessionController.logout()
+
+GET /register                       controllers.CustomerController.index()
+POST /register                       controllers.CustomerController.register()
+
+GET /items                           controllers.ItemController.all()
+
+GET /items/:id                          controllers.ItemController.show(id: Long)
+
+GET /customers                          controllers.CustomerController.all
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)

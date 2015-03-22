@@ -1,36 +1,80 @@
 @(message: String)
 
-@main("Welcome to Play") {
-<div ng-controller="TestController">
-<h1>Welcome</h1>
-<p>@message</p>
+@main_template("Tavaranvaihto") {
+<div>
+    <h2>Viimeisimmät vaihtoon ilmoitetut tavarat</h2>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Tavara</th>
+            <th>Kategoria</th>
+            <th>Vastatarjoukset</th>
+            <th>Lisääjä</th>
+            <th>Ilmoitettu vaihtoon</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td><a href="item.html">Sukset</a></td>
+            <td>Urheilu</td>
+            <td>42</td>
+            <td>Erkki Esimerkki</td>
+            <td>20.3.2015 klo 15:36:22</td>
+        </tr>
+        <tr>
+            <td><a href="item.html">Lumilauta</a></td>
+            <td>Urheilu</td>
+            <td>10</td>
+            <td>Erkki Esimerkki</td>
+            <td>19.3.2015 klo 15:36:22</td>
+        </tr>
 
-<p>Valittuna: {{choices.length}}</p>
-
-<div class="form-group" ng-repeat="choice in choices">
-    <div class="input-group">
-        <select class="form-control" id="sel1">
-            <option>A</option>
-            <option>B</option>
-            <option>C</option>
-            <option>D</option>
-        </select>
-
-        <span class="input-group-addon" id="basic-addon1">.</span>
-
-        <select class="form-control" id="sel2">
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
-        </select>
-
-        <span class="input-group-btn">
-            <button class="btn btn-danger" type="button" ng-click="removeField(choice); alert(choices.length)" ng-show="choices.length > 1">Poista</button>
-            <button class="btn btn-primary" type="button" ng-click="addField();" ng-show="choices.indexOf(choice) == choices.length-1">Lisää</button>
-        </span>
-    </div>
+        <tr>
+            <td><a href="item.html">Tennismaila</a></td>
+            <td>Urheilu</td>
+            <td>4</td>
+            <td>Erkki Esimerkki</td>
+            <td>19.3.2015 klo 15:36:22</td>
+        </tr>
+        </tbody>
+    </table>
 </div>
-    <button class="btn btn-primary" type="button">Seuraava</button>
+<div>
+    <h2>Suosituimmat</h2>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Tavara</th>
+            <th>Kategoria</th>
+            <th>Vastatarjoukset</th>
+            <th>Lisääjä</th>
+            <th>Ilmoitettu vaihtoon</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td><a href="item.html">Sukset</a></td>
+            <td>Urheilu</td>
+            <td>42</td>
+            <td>Erkki Esimerkki</td>
+            <td>20.3.2015 klo 15:36:22</td>
+        </tr>
+        <tr>
+            <td><a href="item.html">Lumilauta</a></td>
+            <td>Urheilu</td>
+            <td>10</td>
+            <td>Erkki Esimerkki</td>
+            <td>19.3.2015 klo 15:36:22</td>
+        </tr>
+
+        <tr>
+            <td><a href="item.html">Tennismaila</a></td>
+            <td>Urheilu</td>
+            <td>4</td>
+            <td>Erkki Esimerkki</td>
+            <td>19.3.2015 klo 15:36:22</td>
+        </tr>
+        </tbody>
+    </table>
 </div>
 }
