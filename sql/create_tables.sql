@@ -1,13 +1,13 @@
 CREATE TABLE Customer (
   id SERIAL PRIMARY KEY,
-  email varchar(255) NOT NULL,
-  username varchar(255) NOT NULL,
+  email UNIQUE varchar(255) NOT NULL,
+  username varchar(255) UNIQUE NOT NULL,
   password varchar(255) NOT NULL
 );
 
 CREATE TABLE Category (
   id SERIAL PRIMARY KEY,
-  title varchar(255) NOT NULL
+  title varchar(255) UNIQUE NOT NULL
 );
 
 CREATE TABLE Item (

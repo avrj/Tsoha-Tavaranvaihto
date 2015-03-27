@@ -1,47 +1,45 @@
 @(message: String, email: String, username: String, registerForm: Form[RegisterForm])
 
 @main_template("Tavaranvaihto") {
-<br/>
+    @if(message) {
+    <div class="alert alert-danger" role="alert">@message</div>
+    }
 
-@if(message) {
-<div class="alert alert-danger" role="alert">@message</div>
-}
-
-@if(registerForm.hasGlobalErrors) {
-<div class="alert alert-danger">
-    @registerForm.globalError.message
-</div>
-}
-
-<div class="login-panel panel panel-default">
-    <div class="panel-heading">
-        <h3 class="panel-title">Luo tunnus</h3>
+    @if(registerForm.hasGlobalErrors) {
+    <div class="alert alert-danger">
+        @registerForm.globalError.message
     </div>
-    <div class="panel-body">
-        @helper.form(action = routes.CustomerController.register(), 'role -> "form") {
-        <div class="form-group">
-            @helper.inputText(registerForm("email"), 'class -> "form-control", 'autofocus -> "", '_showConstraints ->
-            false, '_label -> "Sähköpostiosoite", 'type -> "email")
+    }
+
+    <div class="login-panel panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Luo tunnus</h3>
         </div>
+        <div class="panel-body">
+            @helper.form(action = routes.CustomerController.register(), 'role -> "form") {
+            <div class="form-group">
+                @helper.inputText(registerForm("email"), 'class -> "form-control", 'autofocus -> "", '_showConstraints ->
+                false, '_label -> "Sähköpostiosoite", 'type -> "email")
+            </div>
 
-        <div class="form-group">
-            @helper.inputText(registerForm("username"), 'class -> "form-control", '_showConstraints -> false, '_label ->
-            "Käyttäjätunnus")
+            <div class="form-group">
+                @helper.inputText(registerForm("username"), 'class -> "form-control", '_showConstraints -> false, '_label ->
+                "Käyttäjätunnus")
+            </div>
+
+            <div class="form-group">
+                @helper.inputPassword(registerForm("password"), 'class -> "form-control", '_showConstraints -> false,
+                '_label -> "Salasana")
+            </div>
+
+            <div class="form-group">
+                @helper.inputPassword(registerForm("password_again"), 'class -> "form-control", '_showConstraints -> false,
+                '_label -> "Salasana uudelleen")
+            </div>
+
+            <button class="btn btn-sm btn-success">Rekisteröidy</button>
+            }
+
         </div>
-
-        <div class="form-group">
-            @helper.inputPassword(registerForm("password"), 'class -> "form-control", '_showConstraints -> false,
-            '_label -> "Salasana")
-        </div>
-
-        <div class="form-group">
-            @helper.inputPassword(registerForm("password_again"), 'class -> "form-control", '_showConstraints -> false,
-            '_label -> "Salasana uudelleen")
-        </div>
-
-        <button class="btn btn-sm btn-success">Rekisteröidy</button>
-        }
-
     </div>
-</div>
 }

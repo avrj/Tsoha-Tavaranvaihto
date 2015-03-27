@@ -33,6 +33,9 @@
               <li><a href="@routes.ApplicationController.index()">Etusivu</a></li>
               <li><a href="@routes.ItemController.all()">Selaa tarjontaa <span class="badge">42</span></a></li>
               @if(session().get("username")) {
+                <li><a href="#">Lisää ilmoitus</a></li>
+                <li><a href="#">Omat ilmoitukset</a></li>
+                <li><a href="#">Omat vastatarjoukset</a></li>
                   <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-user"></span> @session().get("username")<span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">
@@ -52,6 +55,19 @@
 
         <div class="container">
          <div class="jumbotron">
+            <br />
+
+            @if(flash.contains("success")) {
+                <div class="alert alert-success" role="alert">@flash.get("success")</div>
+            }
+
+            @if(flash.contains("info")) {
+                <div class="alert alert-info" role="alert">@flash.get("info")</div>
+            }
+
+            @if(flash.contains("error")) {
+                <div class="alert alert-danger" role="alert">@flash.get("error")</div>
+            }
             @content
             </div>
         </div>
