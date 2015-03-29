@@ -2,10 +2,13 @@ package controllers;
 
 import models.*;
 import org.mindrot.jbcrypt.BCrypt;
+import play.data.DynamicForm;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
+import play.mvc.Security;
 import views.html.customer_items;
+import views.html.edit_customer;
 import views.html.register;
 import views.html.show_customer;
 
@@ -22,6 +25,7 @@ public class CustomerController extends Controller {
         return ok(register.render("", null, null, customerForm));
     }
 
+    @Security.Authenticated(Secured.class)
     public static Result all() {
         return ok(Integer.toString(customers.getCustomers().size()));
     }
@@ -37,11 +41,82 @@ public class CustomerController extends Controller {
         return ok(show_customer.render(items.getItemsByCustomerId(Integer.parseInt(session().get("customer_id"))), customer));
     }
 
+    @Security.Authenticated(Secured.class)
     public static Result items() {
         Items items = new Items();
         Categories categories = new Categories();
 
         return ok(customer_items.render(items.getItemsByCustomerId(Integer.parseInt(session().get("customer_id"))), categories.getCategories()));
+    }
+
+    @Security.Authenticated(Secured.class)
+    public static Result edit() {
+        Customer customer = customers.getCustomerById(Long.parseLong(session().get("customer_id")));
+
+        Form<ChangePasswordForm> changePasswordForm = Form.form(ChangePasswordForm.class);
+
+        return ok(edit_customer.render(customer, changePasswordForm));
+    }
+
+    @Security.Authenticated(Secured.class)
+    public static Result update() {
+        Form<ChangePasswordForm> changePasswordForm = Form.form(ChangePasswordForm.class).bindFromRequest();
+
+        Customer customer = customers.getCustomerById(Long.parseLong(session().get("customer_id")));
+
+        if (changePasswordForm.hasErrors()) {
+            return badRequest(edit_customer.render(customer, changePasswordForm));
+        } else {
+            ChangePasswordForm changePassword = changePasswordForm.get();
+            int customer_id = customers.authenticate(customer.getUsername(), changePassword.current_password);
+
+            if(customer_id > 0) {
+                int customerStatus = customers.changePassword(Long.parseLong(session().get("customer_id")), changePassword.new_password);
+
+                if (customerStatus > 0) {
+                    flash("success", "Salasana on nyt vaihdettu.");
+
+                    return redirect(routes.CustomerController.edit());
+                } else {
+                    flash("error", "Salasanan vaihtaminen epäonnistui.");
+
+                    return badRequest(edit_customer.render(customer, changePasswordForm));
+                }
+            } else {
+                flash("error", "Salasanan vaihtaminen epäonnistui: Väärä salasana syötetty.");
+
+                return badRequest(edit_customer.render(customer, changePasswordForm));
+            }
+        }
+    }
+
+    @Security.Authenticated(Secured.class)
+    public static Result delete() {
+        DynamicForm requestData = Form.form().bindFromRequest();
+        String password = requestData.get("password");
+
+        Customer customer = customers.getCustomerById(Long.parseLong(session().get("customer_id")));
+
+        int customer_id = customers.authenticate(customer.getUsername(), password);
+        if(customer_id > 0) {
+            int customerStatus = customers.deleteCustomer(Long.parseLong(session().get("customer_id")));
+
+            if(customerStatus > 0) {
+                session().remove("customer_id");
+
+                flash("info", "Käyttäjätilisi on nyt poistettu.");
+
+                return redirect(routes.SessionController.index());
+            } else {
+                flash("error", "Käyttäjätilin poistaminen epäonnistui.");
+                return redirect(routes.CustomerController.edit());
+            }
+        } else {
+            flash("error", "Käyttäjätilin poistaminen epäonnistui: Väärä salasana syötetty.");
+
+            Form<ChangePasswordForm> changePasswordForm = Form.form(ChangePasswordForm.class).bindFromRequest();
+            return badRequest(edit_customer.render(customer, changePasswordForm));
+        }
     }
 
     public static Result register() {

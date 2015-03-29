@@ -23,9 +23,13 @@ POST /items/:id/update                          controllers.ItemController.updat
 # TODO: change method to DELETE
 GET /items/:id/delete                          controllers.ItemController.delete(id: Long)
 
-GET /customer/items                         controllers.CustomerController.items()
+GET /account/items                         controllers.CustomerController.items()
 
-GET /customer/counteroffers                         controllers.CustomerController.counterOffers()
+GET /account/counteroffers                         controllers.CustomerController.counterOffers()
+
+GET /account                         controllers.CustomerController.edit()
+POST /account/update                         controllers.CustomerController.update()
+POST /account/delete                           controllers.CustomerController.delete()
 
 # Categories
 GET /categories                           controllers.CategoryController.all()

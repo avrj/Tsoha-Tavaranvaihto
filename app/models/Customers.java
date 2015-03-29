@@ -1,6 +1,7 @@
 package models;
 
 import org.mindrot.jbcrypt.BCrypt;
+import play.Logger;
 import play.db.DB;
 
 import java.sql.Connection;
@@ -93,6 +94,26 @@ public class Customers {
 
     }
 
+    public int deleteCustomer(Long id) {
+        String sql = "DELETE FROM Customer WHERE id = ?;";
+
+        PreparedStatement statement = null;
+
+        int result = 0;
+
+        try {
+            statement = connection.prepareStatement(sql);
+
+            statement.setLong(1, id);
+
+            result = statement.executeUpdate();
+        } catch (Exception e) { Logger.error(e.toString()); }
+
+        try { statement.close(); } catch (SQLException e) { Logger.error(e.toString()); }
+
+        return result;
+    }
+
     public int authenticate(String username, String password) {
 
         PreparedStatement statement = null;
@@ -128,5 +149,26 @@ public class Customers {
         }
 
         return 0;
+    }
+
+    public int changePassword(Long id, String password) {
+        String sql = "UPDATE Customer SET password = ? WHERE id = ?;";
+
+        PreparedStatement statement = null;
+
+        int result = 0;
+
+        try {
+            statement = connection.prepareStatement(sql);
+
+            statement.setString(1, BCrypt.hashpw(password, BCrypt.gensalt()));
+            statement.setLong(2, id);
+
+            result = statement.executeUpdate();
+        } catch (Exception e) { Logger.error(e.toString()); }
+
+        try { statement.close(); } catch (SQLException e) { Logger.error(e.toString()); }
+
+        return result;
     }
 }

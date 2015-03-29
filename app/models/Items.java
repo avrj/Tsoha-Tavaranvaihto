@@ -5,6 +5,7 @@ import play.Logger;
 import play.db.DB;
 
 import java.sql.*;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -23,6 +24,7 @@ public class Items {
         ResultSet result = null;
 
         String sql = "SELECT id, customer_id, category_id, title, description, vaihdossa, created_at FROM Item;";
+
         try {
             statement = connection.prepareStatement(sql);
 
@@ -78,6 +80,7 @@ public class Items {
         ResultSet result = null;
 
         String sql = "SELECT id, customer_id, category_id, title, description, vaihdossa, created_at FROM Item WHERE customer_id = ?;";
+
         try {
             statement = connection.prepareStatement(sql);
 
