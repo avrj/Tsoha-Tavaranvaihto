@@ -64,7 +64,7 @@ public class Categories {
 
         try { result.close(); } catch (SQLException e) {  }
 
-        return null;
+        return 0L;
     }
 
     public Category getCategoryById(Long id) {
