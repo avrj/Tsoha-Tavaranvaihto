@@ -16,7 +16,7 @@ public class ItemController extends Controller {
     private static Categories categories = new Categories();
 
     public static Result all() {
-        return ok(items_list.render(items.getItems(), categories.getCategories()));
+        return ok(items_list.render(items.getItems(), categories));
     }
 
     public static Result show(Long id) {

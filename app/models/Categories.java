@@ -30,7 +30,7 @@ public class Categories {
             result = statement.executeQuery();
 
             while (result.next()) {
-                categories.add(new Category(result.getString("title")));
+                categories.add(new Category(result.getLong("id"), result.getString("title")));
             }
 
         } catch (Exception e) {  }
@@ -40,6 +40,31 @@ public class Categories {
         try { result.close(); } catch (SQLException e) {  }
 
         return categories;
+    }
+
+    public Long getItemsCount(Long id) {
+        PreparedStatement statement = null;
+
+        ResultSet result = null;
+
+        String sql = "SELECT COUNT(id) FROM Item WHERE category_id = ?;";
+        try {
+            statement = connection.prepareStatement(sql);
+            statement.setLong(1, id);
+
+            result = statement.executeQuery();
+
+            if (result.next()) {
+                return result.getLong("COUNT(id)");
+            }
+
+        } catch (Exception e) {  }
+
+        try { statement.close(); } catch (SQLException e) {  }
+
+        try { result.close(); } catch (SQLException e) {  }
+
+        return null;
     }
 
     public Category getCategoryById(Long id) {
@@ -55,7 +80,7 @@ public class Categories {
             result = statement.executeQuery();
 
             if (result.next()) {
-                return new Category(result.getString("title"));
+                return new Category(result.getLong("id"), result.getString("title"));
             }
 
         } catch (Exception e) {  }

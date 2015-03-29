@@ -1,15 +1,6 @@
-@(items: List[Item], categories: List[Category])
+@(items: List[Item], categories: Categories)
 
 @main_template("Tavaranvaihto") {
-<div>
-    <p><strong>Kategoria</strong></p>
-
-    <p>
-        @for(category <- categories) {
-        <button type="button" class="btn btn-success">@category.getTitle() <span class="badge">3</span></button>
-        }
-    </p>
-</div>
 <div>
     <h2>Tavarat</h2>
 
@@ -23,6 +14,7 @@
         <thead>
         <tr>
             <th>Tavara</th>
+            <th>Kategoria</th>
             <th>Vastatarjoukset</th>
             <th>Ilmoitettu vaihtoon</th>
         </tr>
@@ -31,7 +23,8 @@
         @for(item <- items) {
         <tr>
             <td><a href="@routes.ItemController.show(item.getCustomerId())">@item.getTitle()</a></td>
-            <td>42</td>
+            <td>@categories.getCategoryById(item.getCategoryId()).getTitle()</td>
+            <td>0</td>
             <td>@item.getTimestamp()</td>
         </tr>
         }

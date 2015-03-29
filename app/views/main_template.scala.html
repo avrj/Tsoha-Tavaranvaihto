@@ -31,7 +31,7 @@
           <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
               <li><a href="@routes.ApplicationController.index()">Etusivu</a></li>
-              <li><a href="@routes.ItemController.all()">Selaa tarjontaa <span class="badge">42</span></a></li>
+              <li><a href="@routes.ItemController.all()">Selaa tarjontaa</a></li>
               @if(session().get("customer_id")) {
                 <li><a href="@routes.ItemController.new_item()">Lisää ilmoitus</a></li>
                 <li><a href="@routes.CustomerController.items()">Omat ilmoitukset</a></li>

@@ -1,4 +1,4 @@
-@(latest_items: List[Item])
+@(latest_items: List[Item], categories: Categories)
 
 @main_template("Tavaranvaihto") {
     <div>
@@ -8,6 +8,7 @@
             <thead>
             <tr>
                 <th>Tavara</th>
+                <th>Kategoria</th>
                 <th>Vastatarjoukset</th>
                 <th>Lisääjä</th>
                 <th>Ilmoitettu vaihtoon</th>
@@ -17,7 +18,8 @@
             @for(item <- latest_items) {
             <tr>
                 <td><a href="@routes.ItemController.show(item.getId())">@item.getTitle()</a></td>
-                <td>42</td>
+                <td>@categories.getCategoryById(item.getCategoryId()).getTitle()</td>
+                <td>0</td>
                 <td><a href="@routes.CustomerController.show(item.getCustomerId())">x</a></td>
                 <td>@item.getTimestamp()</td>
             </tr>

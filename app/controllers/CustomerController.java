@@ -37,8 +37,8 @@ public class CustomerController extends Controller {
             return redirect(routes.ItemController.all());
 
         Items items = new Items();
-
-        return ok(show_customer.render(items.getItemsByCustomerId(Integer.parseInt(session().get("customer_id"))), customer));
+        Categories categories = new Categories();
+        return ok(show_customer.render(items.getItemsByCustomerId(id), customer, categories));
     }
 
     @Security.Authenticated(Secured.class)
@@ -46,7 +46,7 @@ public class CustomerController extends Controller {
         Items items = new Items();
         Categories categories = new Categories();
 
-        return ok(customer_items.render(items.getItemsByCustomerId(Integer.parseInt(session().get("customer_id"))), categories.getCategories()));
+        return ok(customer_items.render(items.getItemsByCustomerId(Long.parseLong(session().get("customer_id"))), categories));
     }
 
     @Security.Authenticated(Secured.class)

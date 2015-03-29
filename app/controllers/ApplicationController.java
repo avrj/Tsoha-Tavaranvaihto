@@ -1,5 +1,6 @@
 package controllers;
 
+import models.Categories;
 import models.Customer;
 import models.Customers;
 import models.Items;
@@ -14,7 +15,9 @@ import java.sql.*;
 public class ApplicationController extends Controller {
     private static Items items = new Items();
     public static Result index() {
-        return ok(index.render(items.getLatestItems(5)));
+        Categories categories = new Categories();
+
+        return ok(index.render(items.getLatestItems(5), categories));
     }
 
     public static String getCurrentCustomer() {

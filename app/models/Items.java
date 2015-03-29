@@ -72,7 +72,7 @@ public class Items {
         return items;
     }
 
-    public List<Item> getItemsByCustomerId(Integer id) {
+    public List<Item> getItemsByCustomerId(Long id) {
         List<Item> items = new ArrayList<>();
 
         PreparedStatement statement = null;
@@ -84,7 +84,7 @@ public class Items {
         try {
             statement = connection.prepareStatement(sql);
 
-            statement.setInt(1, id);
+            statement.setLong(1, id);
 
             result = statement.executeQuery();
 
