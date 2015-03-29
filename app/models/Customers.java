@@ -41,6 +41,35 @@ public class Customers {
         return customers;
     }
 
+    public Customer getCustomerById(Long id) {
+        PreparedStatement statement = null;
+
+        ResultSet result = null;
+
+        String sql = "SELECT id, username, email FROM Customer WHERE id = ?;";
+        try {
+            statement = connection.prepareStatement(sql);
+
+            statement.setLong(1, id);
+
+            result = statement.executeQuery();
+
+            if (result.next()) {
+                return new Customer(result.getString("username"), result.getString("email"));
+            }
+
+        } catch (Exception e) {  }
+
+        try { statement.close(); } catch (SQLException e) {  }
+
+        try { result.close(); } catch (SQLException e) {  }
+
+        return null;
+    }
+
+    /*
+        TODO: Olio parametrina erillisten kenttien sijaan
+    */
     public int createCustomer(String username, String email, String password) {
         String sql = "INSERT INTO Customer (username, email, password) VALUES(?, ?, ?);";
 
@@ -64,14 +93,14 @@ public class Customers {
 
     }
 
-    public boolean authenticate(String username, String password) {
+    public int authenticate(String username, String password) {
 
         PreparedStatement statement = null;
 
         ResultSet result = null;
 
         int tulos = 0;
-        String sql = "SELECT username, password FROM Customer WHERE username = ?";
+        String sql = "SELECT id, username, password FROM Customer WHERE username = ?";
         try {
             statement = connection.prepareStatement(sql);
 
@@ -81,7 +110,7 @@ public class Customers {
 
             if (result.next()) {
                 if(result.getString("username").equals(username) && BCrypt.checkpw(password, result.getString("password"))) {
-                    return true;
+                    return result.getInt("id");
                 }
             }
 
@@ -98,6 +127,6 @@ public class Customers {
         } catch (SQLException e) {
         }
 
-        return false;
+        return 0;
     }
 }

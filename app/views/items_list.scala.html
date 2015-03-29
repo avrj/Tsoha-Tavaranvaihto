@@ -1,0 +1,43 @@
+@(items: List[Item], categories: List[Category])
+
+@main_template("Tavaranvaihto") {
+    <div>
+        <p><strong>Kategoria</strong></p>
+
+        <p>
+            @for(category <- categories) {
+                <button type="button" class="btn btn-success">@category.getTitle() <span class="badge">3</span></button>
+            }
+        </p>
+    </div>
+    <div>
+        <h2>Tavarat</h2>
+
+        @if(items.size() == 1) {
+            <p>Yhteensä 1 tavara</p>
+        } else {
+            <p>Yhteensä @items.size() tavaraa</p>
+        }
+
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Tavara</th>
+                <th>Vastatarjoukset</th>
+                <th>Lisääjä</th>
+                <th>Ilmoitettu vaihtoon</th>
+            </tr>
+            </thead>
+            <tbody>
+            @for(item <- items) {
+                <tr>
+                    <td><a href="@routes.ItemController.show(item.getId())">@item.getTitle()</a></td>
+                    <td>42</td>
+                    <td><a href="@routes.CustomerController.show(item.getCustomerId())">x</a></td>
+                    <td>@item.getTimestamp()</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+}

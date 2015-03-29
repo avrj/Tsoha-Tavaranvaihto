@@ -28,8 +28,9 @@ public class SessionController extends Controller {
         } else {
             LoginForm login_data = loginForm.get();
 
-            if(customers.authenticate(login_data.username, login_data.password)) {
-                session("username", login_data.username);
+            int customer_id = customers.authenticate(login_data.username, login_data.password);
+            if(customer_id > 0) {
+                session("customer_id", Integer.toString(customer_id));
 
                 flash("success", "Tervetuloa " + login_data.username);
 
@@ -44,7 +45,7 @@ public class SessionController extends Controller {
 
     @Security.Authenticated(Secured.class)
     public static Result logout() {
-        session().remove("username");
+        session().remove("customer_id");
 
         flash("info", "Olet nyt kirjautunut ulos järjestelmästä.");
 

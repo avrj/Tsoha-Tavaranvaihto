@@ -1,0 +1,17 @@
+@(item: Item, customer: Customer, category: Category)
+
+@main_template("Tavaranvaihto") {
+    <h2>@item.getTitle()</h2>
+
+    <p>Kategoria: @category.getTitle()</p>
+
+    <p>@item.getDescription()</p>
+
+    <p>Lisääjä: <a href="@routes.CustomerController.show(item.getCustomerId())">@customer.getUsername()</a></p>
+
+    @if(item.getCustomerId() == Integer.parseInt(session().get("customer_id"))) {
+        <p><a href="@routes.ItemController.edit(item.getId())" class="btn btn-primary">Muokkaa ilmoitusta</a> <a href="@routes.ItemController.delete(item.getId())" class="btn btn-danger"  onclick="return confirm('Haluatko varmasti poistaa ilmoituksen?')">Poista ilmoitus</a></p>
+    }
+
+    <p><a href="@routes.ItemController.all()">Takaisin tavaralistaukseen</a></p>
+}

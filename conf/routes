@@ -13,11 +13,28 @@ GET /logout                      controllers.SessionController.logout()
 GET /register                       controllers.CustomerController.index()
 POST /register                       controllers.CustomerController.register()
 
+# Items
 GET /items                           controllers.ItemController.all()
-
+GET /items/new                      controllers.ItemController.new_item()
+POST /items                             controllers.ItemController.create()
 GET /items/:id                          controllers.ItemController.show(id: Long)
+GET /items/:id/edit                          controllers.ItemController.edit(id: Long)
+POST /items/:id/update                          controllers.ItemController.update(id: Long)
+# TODO: change method to DELETE
+GET /items/:id/delete                          controllers.ItemController.delete(id: Long)
 
-GET /customers                          controllers.CustomerController.all
+GET /customer/items                         controllers.CustomerController.items()
+
+GET /customer/counteroffers                         controllers.CustomerController.counterOffers()
+
+# Categories
+GET /categories                           controllers.CategoryController.all()
+GET /categories/new                      controllers.CategoryController.new_category()
+POST /categories                             controllers.CategoryController.create()
+GET /categories/:id                          controllers.CategoryController.show(id: Long)
+
+GET /customers                          controllers.CustomerController.all()
+GET /customers/:id                          controllers.CustomerController.show(id: Long)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)

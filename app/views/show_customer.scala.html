@@ -1,0 +1,32 @@
+@(items: List[Item], customer: Customer)
+
+@main_template("Tavaranvaihto") {
+<div>
+    <h2>Käyttäjän <strong>@customer.getUsername()</strong> tavarat</h2>
+
+    @if(items.size() == 1) {
+    <p>Yhteensä 1 tavara</p>
+    } else {
+    <p>Yhteensä @items.size() tavaraa</p>
+    }
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Tavara</th>
+            <th>Vastatarjoukset</th>
+            <th>Ilmoitettu vaihtoon</th>
+        </tr>
+        </thead>
+        <tbody>
+        @for(item <- items) {
+        <tr>
+            <td><a href="@routes.ItemController.show(item.getCustomerId())">@item.getTitle()</a></td>
+            <td>42</td>
+            <td>@item.getTimestamp()</td>
+        </tr>
+        }
+        </tbody>
+    </table>
+</div>
+}
