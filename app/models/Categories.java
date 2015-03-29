@@ -55,7 +55,7 @@ public class Categories {
             result = statement.executeQuery();
 
             if (result.next()) {
-                return result.getLong("COUNT(id)");
+                return result.getLong(1);
             }
 
         } catch (Exception e) {  }
