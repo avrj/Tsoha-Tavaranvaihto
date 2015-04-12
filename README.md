@@ -13,4 +13,4 @@ Näkymät:
 * [Kirjautuminen](http://shell.lf.fi/~avrj/tsoha-tavaranvaihto/login.html)
 * [Rekisteröityminen](http://shell.lf.fi/~avrj/tsoha-tavaranvaihto/register.html)
 
-Testitunnus: ohjaaja:tsoha2015
+Testitunnus: ohjaajat:tsoha2015
