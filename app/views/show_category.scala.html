@@ -1,0 +1,45 @@
+@(items: List[Item], categories: Categories)
+
+@main_template("Tavaranvaihto") {
+<div>
+    <p><strong>Kategoria</strong></p>
+
+    <p>
+        @for(category <- categories.getCategories()) {
+            @if(categories.getItemsCount(category.getId()) > 0) {
+                <a href="@routes.CategoryController.show(category.getId())" class="btn btn-success">@category.getTitle() <span class="badge">@categories.getItemsCount(category.getId())</span></a>
+            }
+        }
+    </p>
+</div>
+<div>
+    <h2>Tavarat</h2>
+
+    @if(items.size() == 1) {
+    <p>Yhteensä 1 tavara</p>
+    } else {
+    <p>Yhteensä @items.size() tavaraa</p>
+    }
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Tavara</th>
+            <th>Vastatarjoukset</th>
+            <th>Ilmoittaja</th>
+            <th>Ilmoitus jätetty</th>
+        </tr>
+        </thead>
+        <tbody>
+        @for(item <- items) {
+        <tr>
+            <td><a href="@routes.ItemController.show(item.getId())">@item.getTitle()</a></td>
+            <td>@item.getCounterOffersCount()</td>
+            <td><a href="@routes.CustomerController.show(item.getCustomerId())">@item.getOwner().getUsername()</a></td>
+            <td>@item.getTimestamp()</td>
+        </tr>
+        }
+        </tbody>
+    </table>
+</div>
+}

@@ -2,12 +2,17 @@ package controllers;
 
 import models.Categories;
 import models.CategoryForm;
+import models.Item;
+import models.Items;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
 import views.html.categories_list;
 import views.html.new_category;
+import views.html.show_category;
+
+import java.util.List;
 
 /**
  * Created by avrj on 22.3.2015.
@@ -16,11 +21,18 @@ public class CategoryController extends Controller {
     private static Categories categories = new Categories();
 
     public static Result all() {
-        return ok(categories_list.render(categories.getCategories()));
+        List<Item> items = new Items().getItems();
+
+        return ok(show_category.render(items, categories));
     }
 
     public static Result show(Long id) {
-        return ok(categories_list.render(categories.getCategories()));
+        List<Item> items = new Items().getItemsByCategoryId(id);
+
+        if(items.size() == 0)
+            return redirect(routes.ItemController.all());
+
+        return ok(show_category.render(items, categories));
     }
 
     @Security.Authenticated(Secured.class)

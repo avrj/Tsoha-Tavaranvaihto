@@ -130,6 +130,36 @@ public class Items {
         return items;
     }
 
+    public List<Item> getItemsByCategoryId(Long id) {
+        List<Item> items = new ArrayList<>();
+
+        PreparedStatement statement = null;
+
+        ResultSet result = null;
+
+        String sql = "SELECT id, customer_id, category_id, title, description, vaihdossa, created_at, locked_at, locked_customer_id FROM Item WHERE category_id = ?;";
+
+        try {
+            statement = connection.prepareStatement(sql);
+
+            statement.setLong(1, id);
+
+            result = statement.executeQuery();
+
+            while (result.next()) {
+                items.add(new Item(result.getLong("id"), result.getString("title"), result.getString("description"), result.getString("vaihdossa"), result.getLong("category_id"), result.getLong("customer_id"), result.getTimestamp("created_at"), result.getTimestamp("locked_at"), result.getLong("locked_customer_id")));
+            }
+
+
+        } catch (Exception e) { Logger.error(e.toString()); }
+
+        try { statement.close(); } catch (SQLException e) { Logger.error(e.toString());  }
+
+        try { result.close(); } catch (SQLException e) { Logger.error(e.toString()); }
+
+        return items;
+    }
+
     public Item getItemById(Long id) {
         PreparedStatement statement = null;
 

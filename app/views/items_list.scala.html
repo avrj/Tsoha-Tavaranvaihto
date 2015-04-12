@@ -7,7 +7,7 @@
         <p>
             @for(category <- categories.getCategories()) {
                 @if(categories.getItemsCount(category.getId()) > 0) {
-                    <button type="button" class="btn btn-success">@category.getTitle() <span class="badge">@categories.getItemsCount(category.getId())</span></button>
+                    <a href="@routes.CategoryController.show(category.getId())" class="btn btn-success">@category.getTitle() <span class="badge">@categories.getItemsCount(category.getId())</span></a>
                 }
             }
         </p>
