@@ -1,4 +1,4 @@
-@(item: Item, customer: Customer, category: Category)
+@(id: Long, item: Item, customer: Customer, category: Category, currentCustomerCounterOffer: CounterOffer, counterOffers: List[CounterOffer])
 
 @main_template("Tavaranvaihto") {
     <h2>@item.getTitle()</h2>
@@ -7,12 +7,61 @@
 
     <p>@item.getDescription()</p>
 
-    <p><strong>Vastatarjoukset:</strong> 0</p>
+    <p><strong>Vastatarjoukset:</strong> @item.getCounterOffersCount()</p>
 
-    <p><strong>Lisääjä:</strong> <a href="@routes.CustomerController.show(item.getCustomerId())">@customer.getUsername()</a></p>
+    @if(item.getCustomerId() == Integer.parseInt(session().get("customer_id"))) {
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Vastatarjous</th>
+                <th>Tarjouksen tekijä</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            @for(counterOffer <- counterOffers) {
+                <tr>
+                    <td>@counterOffer.getDescription()</td>
+                    <td><a href="@routes.CustomerController.show(counterOffer.getCustomerId())">@counterOffer.getCustomer().getUsername()</a></td>
+                    <td><a href="#" class="btn btn-success">Hyväksy</a></td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    }
+
+    <p><strong>Ilmoittaja:</strong> <a href="@routes.CustomerController.show(item.getCustomerId())">@customer.getUsername()</a></p>
+
+    <p><strong>Ilmoitus jätetty:</strong> @item.getTimestamp()</p>
 
     @if(item.getCustomerId() == Integer.parseInt(session().get("customer_id"))) {
         <p><a href="@routes.ItemController.edit(item.getId())" class="btn btn-primary">Muokkaa ilmoitusta</a> <a href="@routes.ItemController.delete(item.getId())" class="btn btn-danger"  onclick="return confirm('Haluatko varmasti poistaa ilmoituksen?')">Poista ilmoitus</a></p>
+    } else {
+        @if(currentCustomerCounterOffer == null) {
+            @if(item.getLockedAtTimestamp() == null) {
+                <a href="@routes.ItemController.lock(item.getId())" class="btn btn-primary"  onclick="return confirm('Lukitaanko tarjous?')">Lukitse tarjous</a>
+                <br />tai
+
+                @helper.form(action = routes.CounterOfferController.add(id), 'role -> "form") {
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Tarjoan vaihdossa..." name="counteroffer_description">
+                          <span class="input-group-btn">
+                            <input class="btn btn-primary" type="submit" value="Tee vastatarjous" />
+                          </span>
+                    </div>
+                }
+            } else {
+                @if(item.getLockedCustomerId() == Long.parseLong(session().get("customer_id"))) {
+                    <p>Olet lukinnut tarjouksen. <a href="@routes.ItemController.unlock(item.getId())" class="btn btn-danger" onclick="return confirm('Poistetaanko lukitus?')">Poista lukitus</a></p>
+                } else {
+                    <p>Kohde on tilapäisesti lukittu.</p>
+                }
+            }
+        } else {
+                <p>Olet tehnyt vastarjouksen "@currentCustomerCounterOffer.getDescription()" tästä kohteesta <a href="@routes.CounterOfferController.delete(item.getId())" class="btn btn-danger"  onclick="return confirm('Haluatko varmasti perua vastatarjouksesi?')">Peruuta vastatarjous</a></p>
+        }
+
+        <br />
     }
 
     <p><a href="@routes.ItemController.all()">Takaisin tavaralistaukseen</a></p>

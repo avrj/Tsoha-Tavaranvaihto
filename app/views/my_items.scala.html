@@ -2,12 +2,12 @@
 
 @main_template("Tavaranvaihto") {
 <div>
-    <h2>Tavarat</h2>
+    <h2>Omat ilmoitukset</h2>
 
     @if(items.size() == 1) {
-    <p>Yhteensä 1 tavara</p>
+    <p>Yhteensä 1 ilmoitus</p>
     } else {
-    <p>Yhteensä @items.size() tavaraa</p>
+    <p>Yhteensä @items.size() ilmoitusta</p>
     }
 
     <table class="table table-striped">
@@ -16,15 +16,15 @@
             <th>Tavara</th>
             <th>Kategoria</th>
             <th>Vastatarjoukset</th>
-            <th>Ilmoitettu vaihtoon</th>
+            <th>Ilmoitus jätetty</th>
         </tr>
         </thead>
         <tbody>
         @for(item <- items) {
         <tr>
-            <td><a href="@routes.ItemController.show(item.getCustomerId())">@item.getTitle()</a></td>
+            <td><a href="@routes.ItemController.show(item.getId())">@item.getTitle()</a></td>
             <td>@categories.getCategoryById(item.getCategoryId()).getTitle()</td>
-            <td>0</td>
+            <td>@item.getCounterOffersCount()</td>
             <td>@item.getTimestamp()</td>
         </tr>
         }

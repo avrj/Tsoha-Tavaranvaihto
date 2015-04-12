@@ -20,8 +20,15 @@ POST /items                             controllers.ItemController.create()
 GET /items/:id                          controllers.ItemController.show(id: Long)
 GET /items/:id/edit                          controllers.ItemController.edit(id: Long)
 POST /items/:id/update                          controllers.ItemController.update(id: Long)
+
 # TODO: change method to DELETE
 GET /items/:id/delete                          controllers.ItemController.delete(id: Long)
+
+GET /items/:id/lock                          controllers.ItemController.lock(id: Long)
+GET /items/:id/unlock                          controllers.ItemController.unlock(id: Long)
+
+GET /items/:id/counteroffer                          controllers.CounterOfferController.add(id: Long)
+GET /items/:id/counteroffer/delete                          controllers.CounterOfferController.delete(id: Long)
 
 GET /account/items                         controllers.CustomerController.items()
 

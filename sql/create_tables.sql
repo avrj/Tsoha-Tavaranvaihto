@@ -1,6 +1,6 @@
 CREATE TABLE Customer (
   id SERIAL PRIMARY KEY,
-  email UNIQUE varchar(255) NOT NULL,
+  email varchar(255) UNIQUE NOT NULL,
   username varchar(255) UNIQUE NOT NULL,
   password varchar(255) NOT NULL
 );
@@ -12,7 +12,7 @@ CREATE TABLE Category (
 
 CREATE TABLE Item (
   id SERIAL PRIMARY KEY,
-  customer_id INTEGER REFERENCES Customer(id),
+  customer_id INTEGER REFERENCES Customer(id) ON DELETE CASCADE,
   category_id INTEGER REFERENCES Category(id),
   title varchar(255) NOT NULL,
   description text,
@@ -20,13 +20,13 @@ CREATE TABLE Item (
   created_at timestamp,
   locked_at timestamp,
   accepted_offer_at timestamp,
-  accepted_customer_id INTEGER REFERENCES Customer(id),
-  locked_customer_id INTEGER REFERENCES Customer(id)
+  accepted_customer_id INTEGER REFERENCES Customer(id) ON DELETE SET NULL,
+  locked_customer_id INTEGER REFERENCES Customer(id) ON DELETE SET NULL
 );
 
 CREATE TABLE CounterOffer (
-  id SERIAL PRIMARY KEY,
-  customer_id INTEGER REFERENCES Customer(id),
-  item_id INTEGER REFERENCES Item(id),
+  customer_id INTEGER REFERENCES Customer(id) ON DELETE CASCADE,
+  item_id INTEGER REFERENCES Item(id) ON DELETE CASCADE,
   description text,
+  PRIMARY KEY (customer_id, item_id)
 );

@@ -8,6 +8,8 @@ import play.mvc.Result;
 import play.mvc.Security;
 import views.html.*;
 
+import java.util.List;
+
 /**
  * Created by avrj on 22.3.2015.
  */
@@ -31,16 +33,20 @@ public class ItemController extends Controller {
         Customer customer = new Customers().getCustomerById(item.getCustomerId());
         Category category = categories.getCategoryById(item.getCategoryId());
 
-        return ok(show_item.render(item, customer, category));
+        CounterOffer currentCustomerCounterOffer = new CounterOffers().getCounterOfferForItemByCustomerId(id, Long.parseLong(session().get("customer_id")));
+        List<CounterOffer> counterOffers = new CounterOffers().getCounterOffersForItem(id);
+        return ok(show_item.render(id, item, customer, category, currentCustomerCounterOffer, counterOffers));
     }
 
     @Security.Authenticated(Secured.class)
     public static Result edit(Long id) {
-        /*
-        TODO: must belong to current user
-        */
-
         Item item = items.getItemById(id);
+
+        if(item.getCustomerId() != Long.parseLong(session().get("customer_id"))) {
+            flash("error", "Voit muokata vain omia ilmoituksiasi.");
+            return redirect(routes.ItemController.show(id));
+        }
+
         if(item == null)
             return redirect(routes.ItemController.all());
 
@@ -57,9 +63,16 @@ public class ItemController extends Controller {
 
     @Security.Authenticated(Secured.class)
     public static Result update(Long id) {
-        /*
-            TODO: must belong to current user
-         */
+        Item cur_item = items.getItemById(id);
+
+        if(cur_item == null)
+            return redirect(routes.ItemController.all());
+
+        if(cur_item.getCustomerId() != Long.parseLong(session().get("customer_id"))) {
+            flash("error", "Voit muokata vain omia ilmoituksiasi.");
+            return redirect(routes.ItemController.show(id));
+        }
+
         Form<ItemForm> itemForm = Form.form(ItemForm.class).bindFromRequest();
 
         if (itemForm.hasErrors()) {
@@ -85,6 +98,16 @@ public class ItemController extends Controller {
 
     @Security.Authenticated(Secured.class)
     public static Result delete(Long id) {
+        Item item = items.getItemById(id);
+
+        if(item == null)
+            return redirect(routes.ItemController.all());
+
+        if(item.getCustomerId() != Long.parseLong(session().get("customer_id"))) {
+            flash("error", "Voit poistaa vain omia ilmoituksiasi.");
+            return redirect(routes.ItemController.show(id));
+        }
+
         /*
             TODO: must belong to current user
          */
@@ -95,14 +118,11 @@ public class ItemController extends Controller {
         } else {
             flash("error", "Ilmoituksen poistaminen epäonnistui.");
 
-            Item item = items.getItemById(id);
-            if(item == null)
-                return redirect(routes.ItemController.all());
-
             Customer customer = new Customers().getCustomerById(item.getCustomerId());
             Category category = categories.getCategoryById(item.getCategoryId());
-
-            return badRequest(show_item.render(item, customer, category));
+            CounterOffer currentCustomerCounterOffer = new CounterOffers().getCounterOfferForItemByCustomerId(id, Long.parseLong(session().get("customer_id")));
+            List<CounterOffer> counterOffers = new CounterOffers().getCounterOffersForItem(id);
+            return ok(show_item.render(id, item, customer, category, currentCustomerCounterOffer, counterOffers));
         }
     }
 
@@ -133,6 +153,66 @@ public class ItemController extends Controller {
 
                 return badRequest(new_item.render(play.libs.Scala.toSeq(categories.getCategoriesAsScalaTupleList()), newItemForm));
             }
+        }
+    }
+
+    @Security.Authenticated(Secured.class)
+    public static Result lock(Long id) {
+        Item item = items.getItemById(id);
+
+        if(item == null)
+            return redirect(routes.ItemController.all());
+
+        if(item.getCustomerId() == Long.parseLong(session().get("customer_id"))) {
+            flash("error", "Et voi lukita omia ilmoituksiasi.");
+            return redirect(routes.ItemController.show(id));
+        }
+
+        /*
+            TODO: customer cannot lock item that is already locked
+         */
+        if(items.lockItem(id, Long.parseLong(session().get("customer_id"))) > 0) {
+            flash("success", "Ilmoitus lukittu.");
+
+            return redirect(routes.ItemController.show(id));
+        } else {
+            flash("error", "Ilmoituksen lukitseminen epäonnistui.");
+
+            Customer customer = new Customers().getCustomerById(item.getCustomerId());
+            Category category = categories.getCategoryById(item.getCategoryId());
+            CounterOffer currentCustomerCounterOffer = new CounterOffers().getCounterOfferForItemByCustomerId(id, Long.parseLong(session().get("customer_id")));
+            List<CounterOffer> counterOffers = new CounterOffers().getCounterOffersForItem(id);
+            return ok(show_item.render(id, item, customer, category, currentCustomerCounterOffer, counterOffers));
+        }
+    }
+
+    @Security.Authenticated(Secured.class)
+    public static Result unlock(Long id) {
+        Item item = items.getItemById(id);
+
+        if(item == null)
+            return redirect(routes.ItemController.all());
+
+        if(item.getCustomerId() == Long.parseLong(session().get("customer_id"))) {
+            flash("error", "Et voi lukita omia ilmoituksiasi.");
+            return redirect(routes.ItemController.show(id));
+        }
+
+        /*
+            TODO: customer cannot unlock item that belongs to another customer
+         */
+        if(items.unlockItem(id) > 0) {
+            flash("success", "Ilmoituksen lukitus poistettu.");
+
+            return redirect(routes.ItemController.show(id));
+        } else {
+            flash("error", "Ilmoituksen lukituksen poistaminen epäonnistui.");
+
+            Customer customer = new Customers().getCustomerById(item.getCustomerId());
+            Category category = categories.getCategoryById(item.getCategoryId());
+            CounterOffer currentCustomerCounterOffer = new CounterOffers().getCounterOfferForItemByCustomerId(id, Long.parseLong(session().get("customer_id")));
+            List<CounterOffer> counterOffers = new CounterOffers().getCounterOffersForItem(id);
+            return ok(show_item.render(id, item, customer, category, currentCustomerCounterOffer, counterOffers));
         }
     }
 }

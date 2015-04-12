@@ -26,16 +26,16 @@
             <tr>
                 <th>Tavara</th>
                 <th>Vastatarjoukset</th>
-                <th>Lisääjä</th>
-                <th>Ilmoitettu vaihtoon</th>
+                <th>Ilmoittaja</th>
+                <th>Ilmoitus jätetty</th>
             </tr>
             </thead>
             <tbody>
             @for(item <- items) {
                 <tr>
                     <td><a href="@routes.ItemController.show(item.getId())">@item.getTitle()</a></td>
-                    <td>0</td>
-                    <td><a href="@routes.CustomerController.show(item.getCustomerId())">x</a></td>
+                    <td>@item.getCounterOffersCount()</td>
+                    <td><a href="@routes.CustomerController.show(item.getCustomerId())">@item.getOwner().getUsername()</a></td>
                     <td>@item.getTimestamp()</td>
                 </tr>
             }

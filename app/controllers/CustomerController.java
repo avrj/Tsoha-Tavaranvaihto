@@ -7,10 +7,11 @@ import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
-import views.html.customer_items;
+import views.html.my_items;
 import views.html.edit_customer;
 import views.html.register;
 import views.html.show_customer;
+import views.html.my_counteroffers;
 
 /**
  * Created by avrj on 22.3.2015.
@@ -46,7 +47,7 @@ public class CustomerController extends Controller {
         Items items = new Items();
         Categories categories = new Categories();
 
-        return ok(customer_items.render(items.getItemsByCustomerId(Long.parseLong(session().get("customer_id"))), categories));
+        return ok(my_items.render(items.getItemsByCustomerId(Long.parseLong(session().get("customer_id"))), categories));
     }
 
     @Security.Authenticated(Secured.class)
@@ -144,6 +145,8 @@ public class CustomerController extends Controller {
     }
 
     public static Result counterOffers() {
-        return ok("TBA");
+        Items items = new Items();
+
+        return ok(my_counteroffers.render(items.getItemsForCustomerCounterOffersByCustomerId(Long.parseLong(session().get("customer_id")))));
     }
 }

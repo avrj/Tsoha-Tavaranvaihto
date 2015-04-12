@@ -1,4 +1,4 @@
-@(latest_items: List[Item], categories: Categories)
+@(latest_items: List[Item], most_popular_items: List[Item], categories: Categories)
 
 @main_template("Tavaranvaihto") {
     <div>
@@ -11,7 +11,7 @@
                 <th>Kategoria</th>
                 <th>Vastatarjoukset</th>
                 <th>Lisääjä</th>
-                <th>Ilmoitettu vaihtoon</th>
+                <th>Ilmoitus jätetty</th>
             </tr>
             </thead>
             <tbody>
@@ -19,8 +19,8 @@
             <tr>
                 <td><a href="@routes.ItemController.show(item.getId())">@item.getTitle()</a></td>
                 <td>@categories.getCategoryById(item.getCategoryId()).getTitle()</td>
-                <td>0</td>
-                <td><a href="@routes.CustomerController.show(item.getCustomerId())">x</a></td>
+                <td>@item.getCounterOffersCount()</td>
+                <td><a href="@routes.CustomerController.show(item.getCustomerId())">@item.getOwner().getUsername()</a></td>
                 <td>@item.getTimestamp()</td>
             </tr>
             }
@@ -30,6 +30,27 @@
     <div>
         <h2>Suosituimmat</h2>
 
-        <p>TBA</p>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Tavara</th>
+                <th>Kategoria</th>
+                <th>Vastatarjoukset</th>
+                <th>Lisääjä</th>
+                <th>Ilmoitus jätetty</th>
+            </tr>
+            </thead>
+            <tbody>
+            @for(item <- most_popular_items) {
+            <tr>
+                <td><a href="@routes.ItemController.show(item.getId())">@item.getTitle()</a></td>
+                <td>@categories.getCategoryById(item.getCategoryId()).getTitle()</td>
+                <td>@item.getCounterOffersCount()</td>
+                <td><a href="@routes.CustomerController.show(item.getCustomerId())">@item.getOwner().getUsername()</a></td>
+                <td>@item.getTimestamp()</td>
+            </tr>
+            }
+            </tbody>
+        </table>
     </div>
 }
