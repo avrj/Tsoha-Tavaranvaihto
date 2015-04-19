@@ -16,7 +16,7 @@
             <h3 class="panel-title">Luo tunnus</h3>
         </div>
         <div class="panel-body">
-            @helper.form(action = routes.CustomerController.register(), 'role -> "form") {
+            @helper.form(action = routes.CustomerController.create(), 'role -> "form") {
             <div class="form-group">
                 @helper.inputText(registerForm("email"), 'class -> "form-control", 'autofocus -> "", '_showConstraints ->
                 false, '_label -> "Sähköpostiosoite", 'type -> "email")

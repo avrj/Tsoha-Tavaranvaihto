@@ -3,6 +3,7 @@ package models;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Calendar;
 
 /**
  * Created by avrj on 27.3.2015.
@@ -68,7 +69,20 @@ public class Item {
         return locked_at_timestamp;
     }
 
+    public java.sql.Timestamp getLockExpiresAtTimestamp() {
+        Calendar cal = Calendar.getInstance();
+
+        cal.setTime(locked_at_timestamp);
+        cal.add(Calendar.DAY_OF_WEEK, 1);
+
+        return new java.sql.Timestamp(cal.getTime().getTime());
+    }
+
     public Long getLockedCustomerId() {
         return locked_customer_id;
+    }
+
+    public Customer getLockedCustomer() {
+        return new Customers().getCustomerById(locked_customer_id);
     }
 }

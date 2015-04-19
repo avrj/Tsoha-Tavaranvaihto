@@ -22,7 +22,12 @@
         <tbody>
         @for(item <- items) {
         <tr>
-            <td><a href="@routes.ItemController.show(item.getId())">@item.getTitle()</a></td>
+            @if(item.getLockedAtTimestamp() == null) {
+                <td><a href="@routes.ItemController.show(item.getId())">@item.getTitle()</a></td>
+            } else {
+                <td><a href="@routes.ItemController.show(item.getId())"><span class="glyphicon glyphicon-lock"></span> @item.getTitle()</a></td>
+            }
+
             <td>@categories.getCategoryById(item.getCategoryId()).getTitle()</td>
             <td>@item.getCounterOffersCount()</td>
             <td>@item.getTimestamp()</td>

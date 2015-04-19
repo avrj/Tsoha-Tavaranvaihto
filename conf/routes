@@ -10,36 +10,39 @@ POST /session                         controllers.SessionController.login()
 
 GET /logout                      controllers.SessionController.logout()
 
-GET /register                       controllers.CustomerController.index()
-POST /register                       controllers.CustomerController.register()
+GET /register                       controllers.CustomerController.new_customer()
+POST /register                       controllers.CustomerController.create()
 
-# Items
+# Items/
 GET /items                           controllers.ItemController.all()
 GET /items/new                      controllers.ItemController.new_item()
 POST /items                             controllers.ItemController.create()
 GET /items/:id                          controllers.ItemController.show(id: Long)
 GET /items/:id/edit                          controllers.ItemController.edit(id: Long)
-POST /items/:id/update                          controllers.ItemController.update(id: Long)
+POST /items/:id                          controllers.ItemController.update(id: Long)
 
-# TODO: change method to DELETE
-GET /items/:id/delete                          controllers.ItemController.delete(id: Long)
+POST /items/:id/delete                          controllers.ItemController.delete(id: Long)
 
-GET /items/:id/lock                          controllers.ItemController.lock(id: Long)
-GET /items/:id/unlock                          controllers.ItemController.unlock(id: Long)
+POST /items/:id/lock                          controllers.ItemController.lock(id: Long)
+POST /items/:id/unlock                          controllers.ItemController.unlock(id: Long)
+POST /items/:id/accept                          controllers.ItemController.acceptOffer(id: Long)
 
-GET /items/:id/counteroffer                          controllers.CounterOfferController.add(id: Long)
-GET /items/:id/counteroffer/delete                          controllers.CounterOfferController.delete(id: Long)
+POST /items/:id/counteroffer                          controllers.CounterOfferController.add(id: Long)
+POST /items/:id/counteroffer/delete                          controllers.CounterOfferController.delete(id: Long)
+
+POST /items/:id/counteroffer/accept                     controllers.CounterOfferController.accept(id: Long)
 
 GET /account/items                         controllers.CustomerController.items()
 
 GET /account/counteroffers                         controllers.CustomerController.counterOffers()
 
 GET /account                         controllers.CustomerController.edit()
-POST /account/update                         controllers.CustomerController.update()
+POST /account                         controllers.CustomerController.update()
 POST /account/delete                           controllers.CustomerController.delete()
 
 # Categories
 GET /categories                           controllers.CategoryController.all()
+# This is only for testing purposes
 GET /categories/new                      controllers.CategoryController.new_category()
 POST /categories                             controllers.CategoryController.create()
 GET /categories/:id                          controllers.CategoryController.show(id: Long)

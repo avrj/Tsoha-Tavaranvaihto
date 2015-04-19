@@ -34,7 +34,11 @@
               <li><a href="@routes.ItemController.all()">Selaa tarjontaa</a></li>
               @if(session().get("customer_id")) {
                 <li><a href="@routes.ItemController.new_item()">Lisää ilmoitus</a></li>
-                <li><a href="@routes.CustomerController.items()">Omat ilmoitukset</a></li>
+                @if(controllers.CustomerController.getLockedItemsCount() > 0) {
+                    <li><a href="@routes.CustomerController.items()">Omat ilmoitukset <span class="glyphicon glyphicon-lock"></span> @controllers.CustomerController.getLockedItemsCount()</a></li>
+                } else {
+                    <li><a href="@routes.CustomerController.items()">Omat ilmoitukset</a></li>
+                }
                 <li><a href="@routes.CustomerController.counterOffers()">Omat vastatarjoukset</a></li>
                   <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-user"></span> @controllers.ApplicationController.getCurrentCustomer() <span class="caret"></span></a>
@@ -46,7 +50,7 @@
             </li>
               } else {
               <li><a href="@routes.SessionController.index()">Kirjaudu</a></li>
-              <li><a href="@routes.CustomerController.index()">Luo tunnus</a></li>
+              <li><a href="@routes.CustomerController.new_customer()">Luo tunnus</a></li>
               }
             </ul>
           </div><!--/.nav-collapse -->

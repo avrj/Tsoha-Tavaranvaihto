@@ -70,4 +70,12 @@ public class CounterOfferController extends Controller {
             return ok(show_item.render(id, item, customer, category, currentCustomerCounterOffer, counterOffers));
         }
     }
+
+    @Security.Authenticated(Secured.class)
+    public static Result accept(Long item_id) {
+        DynamicForm requestData = Form.form().bindFromRequest();
+        Long customer_id = Long.parseLong(requestData.get("customer_id"));
+
+        return ok();
+    }
 }

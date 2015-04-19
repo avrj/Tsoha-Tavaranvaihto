@@ -31,7 +31,7 @@ CREATE TABLE Item (
 CREATE TABLE CounterOffer (
   customer_id INTEGER REFERENCES Customer(id) ON DELETE CASCADE,
   item_id INTEGER REFERENCES Item(id) ON DELETE CASCADE,
-  description text,
+  description text NOT NULL,
   PRIMARY KEY (customer_id, item_id)
 );
 

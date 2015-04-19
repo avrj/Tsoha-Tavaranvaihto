@@ -19,7 +19,7 @@ import views.html.my_counteroffers;
 public class CustomerController extends Controller {
     private static Customers customers = new Customers();
 
-    public static Result index() {
+    public static Result new_customer() {
         Form<RegisterForm> customerForm = Form.form(RegisterForm.class);
 
 
@@ -120,7 +120,7 @@ public class CustomerController extends Controller {
         }
     }
 
-    public static Result register() {
+    public static Result create() {
         Form<RegisterForm> customerForm = Form.form(RegisterForm.class).bindFromRequest();
 
         if (customerForm.hasErrors()) {
@@ -148,5 +148,9 @@ public class CustomerController extends Controller {
         Items items = new Items();
 
         return ok(my_counteroffers.render(items.getItemsForCustomerCounterOffersByCustomerId(Long.parseLong(session().get("customer_id")))));
+    }
+
+    public static Long getLockedItemsCount() {
+        return customers.getLockedItemsCountByCustomerId(Long.parseLong(session().get("customer_id")));
     }
 }

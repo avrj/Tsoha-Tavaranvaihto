@@ -2,6 +2,7 @@ package controllers;
 
 import models.*;
 import play.Logger;
+import play.data.DynamicForm;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -193,11 +194,6 @@ public class ItemController extends Controller {
         if(item == null)
             return redirect(routes.ItemController.all());
 
-        if(item.getCustomerId() == Long.parseLong(session().get("customer_id"))) {
-            flash("error", "Et voi lukita omia ilmoituksiasi.");
-            return redirect(routes.ItemController.show(id));
-        }
-
         /*
             TODO: customer cannot unlock item that belongs to another customer
          */
@@ -214,5 +210,10 @@ public class ItemController extends Controller {
             List<CounterOffer> counterOffers = new CounterOffers().getCounterOffersForItem(id);
             return ok(show_item.render(id, item, customer, category, currentCustomerCounterOffer, counterOffers));
         }
+    }
+
+    @Security.Authenticated(Secured.class)
+    public static Result acceptOffer(Long id) {
+        return ok();
     }
 }

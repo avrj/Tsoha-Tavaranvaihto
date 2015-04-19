@@ -68,6 +68,32 @@ public class Customers {
         return null;
     }
 
+    public Long getLockedItemsCountByCustomerId(Long customer_id) {
+        PreparedStatement statement = null;
+
+        ResultSet result = null;
+
+        String sql = "SELECT COUNT(id) FROM Item WHERE customer_id = ? AND locked_customer_id IS NOT NULL;";
+        try {
+            statement = connection.prepareStatement(sql);
+
+            statement.setLong(1, customer_id);
+
+            result = statement.executeQuery();
+
+            if (result.next()) {
+                return result.getLong("COUNT(id)");
+            }
+
+        } catch (Exception e) {  }
+
+        try { statement.close(); } catch (SQLException e) {  }
+
+        try { result.close(); } catch (SQLException e) {  }
+
+        return 0L;
+    }
+
     /*
         TODO: Olio parametrina erillisten kenttien sijaan
     */

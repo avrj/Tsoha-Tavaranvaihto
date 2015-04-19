@@ -17,8 +17,7 @@ public class ApplicationController extends Controller {
     public static Result index() {
         Categories categories = new Categories();
 
-        // 2nd attribute should be items.getMostPopularItems(5)
-        return ok(index.render(items.getLatestItems(5), items.getLatestItems(5), categories));
+        return ok(index.render(items.getLatestItems(5), items.getMostPopularItems(5), categories));
     }
 
     public static String getCurrentCustomer() {
