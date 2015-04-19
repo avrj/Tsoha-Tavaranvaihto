@@ -10,10 +10,10 @@ import java.util.Calendar;
  */
 public class Item {
     private String title, description, vaihdossa;
-    private Long item_id, category_id, customer_id, locked_customer_id;
-    private java.sql.Timestamp timestamp, locked_at_timestamp;
+    private Long item_id, category_id, customer_id, locked_customer_id, accepted_customer_id;
+    private java.sql.Timestamp timestamp, locked_at_timestamp, accepted_offer_at;
 
-    public Item(Long item_id, String title, String description, String vaihdossa, Long category_id, Long customer_id, java.sql.Timestamp created_at_timestamp, java.sql.Timestamp locked_at_timestamp, Long locked_customer_id) {
+    public Item(Long item_id, String title, String description, String vaihdossa, Long category_id, Long customer_id, java.sql.Timestamp created_at_timestamp, java.sql.Timestamp locked_at_timestamp, Long locked_customer_id, java.sql.Timestamp accepted_offer_at, Long accepted_customer_id) {
         this.title = title;
         this.description = description;
         this.vaihdossa = vaihdossa;
@@ -23,6 +23,8 @@ public class Item {
         this.item_id = item_id;
         this.locked_at_timestamp = locked_at_timestamp;
         this.locked_customer_id = locked_customer_id;
+        this.accepted_offer_at = accepted_offer_at;
+        this.accepted_customer_id = accepted_customer_id;
     }
 
     public Long getId() {
@@ -84,5 +86,21 @@ public class Item {
 
     public Customer getLockedCustomer() {
         return new Customers().getCustomerById(locked_customer_id);
+    }
+
+    public java.sql.Timestamp getAcceptedOfferAtTimestamp() {
+        return accepted_offer_at;
+    }
+
+    public Long getAcceptedOfferCustomerId() {
+        return accepted_customer_id;
+    }
+
+    public java.sql.Timestamp getAcceptedOfferAt() {
+        return accepted_offer_at;
+    }
+
+    public Customer getAcceptedOfferCustomer() {
+        return new Customers().getCustomerById(accepted_customer_id);
     }
 }

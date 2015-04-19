@@ -1,0 +1,33 @@
+@(items: List[Item])
+
+@layouts.main_template("Tavaranvaihto") {
+<div>
+    <h2>Omat tarjoukset</h2>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Tavara</th>
+            <th>Ilmoittaja</th>
+            <th>Ilmoitus jätetty</th>
+            <th>Tarjous jätetty</th>
+            <th>Poistuu</th>
+            <th>Tila</th>
+        </tr>
+        </thead>
+        <tbody>
+        @for(item <- items) {
+        <tr>
+            <td><a href="@routes.ItemController.show(item.getId())">@item.getTitle()</a></td>
+            <td><a href="@routes.CustomerController.show(item.getCustomerId())">@item.getOwner().getUsername()</a></td>
+            <td>@item.getTimestamp()</td>
+            <td>@item.getLockedAtTimestamp()</td>
+            <td>@item.getLockExpiresAtTimestamp()</td>
+            <td>Odottaa hyväksymistä</td>
+        </tr>
+        }
+        </tbody>
+    </table>
+</div>
+
+}

@@ -7,11 +7,6 @@ import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
-import views.html.my_items;
-import views.html.edit_customer;
-import views.html.register;
-import views.html.show_customer;
-import views.html.my_counteroffers;
 
 /**
  * Created by avrj on 22.3.2015.
@@ -23,7 +18,7 @@ public class CustomerController extends Controller {
         Form<RegisterForm> customerForm = Form.form(RegisterForm.class);
 
 
-        return ok(register.render("", null, null, customerForm));
+        return ok(views.html.customers.add.render("", null, null, customerForm));
     }
 
     @Security.Authenticated(Secured.class)
@@ -39,7 +34,7 @@ public class CustomerController extends Controller {
 
         Items items = new Items();
         Categories categories = new Categories();
-        return ok(show_customer.render(items.getItemsByCustomerId(id), customer, categories));
+        return ok(views.html.customers.show.render(items.getOpenItemsByCustomerId(id), customer, categories));
     }
 
     @Security.Authenticated(Secured.class)
@@ -47,7 +42,7 @@ public class CustomerController extends Controller {
         Items items = new Items();
         Categories categories = new Categories();
 
-        return ok(my_items.render(items.getItemsByCustomerId(Long.parseLong(session().get("customer_id"))), categories));
+        return ok(views.html.customers.items.render(items.getItemsByCustomerId(Long.parseLong(session().get("customer_id"))), categories));
     }
 
     @Security.Authenticated(Secured.class)
@@ -56,7 +51,7 @@ public class CustomerController extends Controller {
 
         Form<ChangePasswordForm> changePasswordForm = Form.form(ChangePasswordForm.class);
 
-        return ok(edit_customer.render(customer, changePasswordForm));
+        return ok(views.html.customers.edit.render(customer, changePasswordForm));
     }
 
     @Security.Authenticated(Secured.class)
@@ -66,7 +61,7 @@ public class CustomerController extends Controller {
         Customer customer = customers.getCustomerById(Long.parseLong(session().get("customer_id")));
 
         if (changePasswordForm.hasErrors()) {
-            return badRequest(edit_customer.render(customer, changePasswordForm));
+            return badRequest(views.html.customers.edit.render(customer, changePasswordForm));
         } else {
             ChangePasswordForm changePassword = changePasswordForm.get();
             int customer_id = customers.authenticate(customer.getUsername(), changePassword.current_password);
@@ -81,12 +76,12 @@ public class CustomerController extends Controller {
                 } else {
                     flash("error", "Salasanan vaihtaminen epäonnistui.");
 
-                    return badRequest(edit_customer.render(customer, changePasswordForm));
+                    return badRequest(views.html.customers.edit.render(customer, changePasswordForm));
                 }
             } else {
                 flash("error", "Salasanan vaihtaminen epäonnistui: Väärä salasana syötetty.");
 
-                return badRequest(edit_customer.render(customer, changePasswordForm));
+                return badRequest(views.html.customers.edit.render(customer, changePasswordForm));
             }
         }
     }
@@ -116,7 +111,7 @@ public class CustomerController extends Controller {
             flash("error", "Käyttäjätilin poistaminen epäonnistui: Väärä salasana syötetty.");
 
             Form<ChangePasswordForm> changePasswordForm = Form.form(ChangePasswordForm.class).bindFromRequest();
-            return badRequest(edit_customer.render(customer, changePasswordForm));
+            return badRequest(views.html.customers.edit.render(customer, changePasswordForm));
         }
     }
 
@@ -124,7 +119,7 @@ public class CustomerController extends Controller {
         Form<RegisterForm> customerForm = Form.form(RegisterForm.class).bindFromRequest();
 
         if (customerForm.hasErrors()) {
-            return badRequest(register.render("", null, null, customerForm));
+            return badRequest(views.html.customers.add.render("", null, null, customerForm));
         } else {
             RegisterForm customer = customerForm.get();
 
@@ -139,18 +134,20 @@ public class CustomerController extends Controller {
                 /*
                     TODO: flash
                  */
-                return badRequest(register.render("Käyttäjätilin luominen epäonnistui", customer.email, customer.username, customerForm));
+                return badRequest(views.html.customers.add.render("Käyttäjätilin luominen epäonnistui", customer.email, customer.username, customerForm));
             }
         }
     }
 
     public static Result counterOffers() {
-        Items items = new Items();
-
-        return ok(my_counteroffers.render(items.getItemsForCustomerCounterOffersByCustomerId(Long.parseLong(session().get("customer_id")))));
+        return ok(views.html.customers.counteroffers.render(new Items().getItemsForCustomerCounterOffersByCustomerId(Long.parseLong(session().get("customer_id")))));
     }
 
     public static Long getLockedItemsCount() {
         return customers.getLockedItemsCountByCustomerId(Long.parseLong(session().get("customer_id")));
+    }
+
+    public static Result offers() {
+        return ok(views.html.customers.offers.render(new Items().getItemsForCustomerOffersByCustomerId(Long.parseLong(session().get("customer_id")))));
     }
 }

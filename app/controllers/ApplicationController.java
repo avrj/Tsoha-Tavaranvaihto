@@ -8,8 +8,6 @@ import play.data.validation.Constraints;
 import play.db.DB;
 import play.mvc.*;
 
-import views.html.*;
-
 import java.sql.*;
 
 public class ApplicationController extends Controller {
@@ -17,7 +15,7 @@ public class ApplicationController extends Controller {
     public static Result index() {
         Categories categories = new Categories();
 
-        return ok(index.render(items.getLatestItems(5), items.getMostPopularItems(5), categories));
+        return ok(views.html.index.render(items.getLatestItems(5), items.getMostPopularItems(5), categories));
     }
 
     public static String getCurrentCustomer() {

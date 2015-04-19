@@ -1,6 +1,6 @@
 @(message: String, email: String, username: String, registerForm: Form[RegisterForm])
 
-@main_template("Tavaranvaihto") {
+@layouts.main_template("Tavaranvaihto") {
     @if(message) {
     <div class="alert alert-danger" role="alert">@message</div>
     }

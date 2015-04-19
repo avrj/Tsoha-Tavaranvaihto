@@ -8,9 +8,6 @@ import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
-import views.html.categories_list;
-import views.html.new_category;
-import views.html.show_category;
 
 import java.util.List;
 
@@ -21,25 +18,25 @@ public class CategoryController extends Controller {
     private static Categories categories = new Categories();
 
     public static Result all() {
-        List<Item> items = new Items().getItems();
+        List<Item> items = new Items().getOpenItems();
 
-        return ok(show_category.render(items, categories));
+        return ok(views.html.categories.show.render(items, categories));
     }
 
     public static Result show(Long id) {
-        List<Item> items = new Items().getItemsByCategoryId(id);
+        List<Item> items = new Items().getOpenItemsByCategoryId(id);
 
         if(items.size() == 0)
             return redirect(routes.ItemController.all());
 
-        return ok(show_category.render(items, categories));
+        return ok(views.html.categories.show.render(items, categories));
     }
 
     @Security.Authenticated(Secured.class)
     public static Result new_category() {
         Form<CategoryForm> newCategoryForm = Form.form(CategoryForm.class);
 
-        return ok(new_category.render(newCategoryForm));
+        return ok(views.html.categories.add.render(newCategoryForm));
     }
 
     @Security.Authenticated(Secured.class)
@@ -47,7 +44,7 @@ public class CategoryController extends Controller {
         Form<CategoryForm> newCategoryForm = Form.form(CategoryForm.class).bindFromRequest();
 
         if (newCategoryForm.hasErrors()) {
-            return badRequest(new_category.render(newCategoryForm));
+            return badRequest(views.html.categories.add.render(newCategoryForm));
         } else {
             CategoryForm category = newCategoryForm.get();
 
@@ -60,7 +57,7 @@ public class CategoryController extends Controller {
             } else {
                 flash("error", "Kategorian lisääminen epäonnistui.");
 
-                return badRequest(new_category.render(newCategoryForm));
+                return badRequest(views.html.categories.add.render(newCategoryForm));
             }
         }
     }

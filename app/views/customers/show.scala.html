@@ -1,6 +1,6 @@
 @(items: List[Item], customer: Customer, categories: Categories)
 
-@main_template("Tavaranvaihto") {
+@layouts.main_template("Tavaranvaihto") {
 <div>
     <h2>Käyttäjän <strong>@customer.getUsername()</strong> tavarat</h2>
 

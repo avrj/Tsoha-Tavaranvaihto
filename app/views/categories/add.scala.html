@@ -1,6 +1,6 @@
 @(newCategoryForm: Form[CategoryForm])
 
-@main_template("Tavaranvaihto") {
+@layouts.main_template("Tavaranvaihto") {
 
 @if(newCategoryForm.hasGlobalErrors) {
 <div class="alert alert-danger">

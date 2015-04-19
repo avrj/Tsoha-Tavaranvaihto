@@ -1,6 +1,6 @@
 @(loginForm: Form[LoginForm])
 
-@main_template("Tavaranvaihto") {
+@layouts.main_template("Tavaranvaihto") {
     @if(loginForm.hasGlobalErrors) {
     <div class="alert alert-danger">
         @loginForm.globalError.message

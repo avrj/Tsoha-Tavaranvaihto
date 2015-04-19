@@ -6,7 +6,6 @@ import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
-import views.html.show_item;
 
 import java.util.List;
 
@@ -40,7 +39,7 @@ public class CounterOfferController extends Controller {
             CounterOffer currentCustomerCounterOffer = new CounterOffers().getCounterOfferForItemByCustomerId(id, Long.parseLong(session().get("customer_id")));
             List<CounterOffer> counterOffers = new CounterOffers().getCounterOffersForItem(id);
 
-            return ok(show_item.render(id, item, customer, category, currentCustomerCounterOffer, counterOffers));
+            return ok(views.html.items.show.render(id, item, customer, category, currentCustomerCounterOffer, counterOffers));
         }
     }
 
@@ -67,7 +66,7 @@ public class CounterOfferController extends Controller {
             CounterOffer currentCustomerCounterOffer = new CounterOffers().getCounterOfferForItemByCustomerId(id, Long.parseLong(session().get("customer_id")));
             List<CounterOffer> counterOffers = new CounterOffers().getCounterOffersForItem(id);
 
-            return ok(show_item.render(id, item, customer, category, currentCustomerCounterOffer, counterOffers));
+            return ok(views.html.items.show.render(id, item, customer, category, currentCustomerCounterOffer, counterOffers));
         }
     }
 

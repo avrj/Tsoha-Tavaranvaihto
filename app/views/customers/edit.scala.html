@@ -1,6 +1,6 @@
 @(customer: Customer, changePasswordForm: Form[ChangePasswordForm])
 
-@main_template("Tavaranvaihto") {
+@layouts.main_template("Tavaranvaihto") {
     <h2>Käyttäjätilin asetukset</h2>
 
     <p>@customer.getUsername() (@customer.getEmail())</p>

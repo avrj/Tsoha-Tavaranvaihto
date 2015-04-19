@@ -1,6 +1,6 @@
 @(categories: Seq[(String, String)], newItemForm: Form[ItemForm])
 
-@main_template("Tavaranvaihto") {
+@layouts.main_template("Tavaranvaihto") {
 
     @if(newItemForm.hasGlobalErrors) {
         <div class="alert alert-danger">

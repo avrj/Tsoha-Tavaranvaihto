@@ -35,6 +35,7 @@ POST /items/:id/counteroffer/accept                     controllers.CounterOffer
 GET /account/items                         controllers.CustomerController.items()
 
 GET /account/counteroffers                         controllers.CustomerController.counterOffers()
+GET /account/offers                         controllers.CustomerController.offers()
 
 GET /account                         controllers.CustomerController.edit()
 POST /account                         controllers.CustomerController.update()

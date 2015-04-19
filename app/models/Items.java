@@ -23,7 +23,7 @@ public class Items {
 
         ResultSet result = null;
 
-        String sql = "SELECT id, customer_id, category_id, title, description, vaihdossa, created_at, locked_at, locked_customer_id FROM Item;";
+        String sql = "SELECT id, customer_id, category_id, title, description, vaihdossa, created_at, locked_at, locked_customer_id, accepted_offer_at, accepted_customer_id FROM Item;";
 
         try {
             statement = connection.prepareStatement(sql);
@@ -31,7 +31,35 @@ public class Items {
             result = statement.executeQuery();
 
             while (result.next()) {
-                items.add(new Item(result.getLong("id"), result.getString("title"), result.getString("description"), result.getString("vaihdossa"), result.getLong("category_id"), result.getLong("customer_id"), result.getTimestamp("created_at"), result.getTimestamp("locked_at"), result.getLong("locked_customer_id")));
+                items.add(new Item(result.getLong("id"), result.getString("title"), result.getString("description"), result.getString("vaihdossa"), result.getLong("category_id"), result.getLong("customer_id"), result.getTimestamp("created_at"), result.getTimestamp("locked_at"), result.getLong("locked_customer_id"), result.getTimestamp("accepted_offer_at"), result.getLong("accepted_customer_id")));
+            }
+
+
+        } catch (Exception e) { Logger.error(e.toString()); }
+
+        try { statement.close(); } catch (SQLException e) { Logger.error(e.toString());  }
+
+        try { result.close(); } catch (SQLException e) { Logger.error(e.toString()); }
+
+        return items;
+    }
+
+    public List<Item> getOpenItems() {
+        List<Item> items = new ArrayList<>();
+
+        PreparedStatement statement = null;
+
+        ResultSet result = null;
+
+        String sql = "SELECT id, customer_id, category_id, title, description, vaihdossa, created_at, locked_at, locked_customer_id, accepted_offer_at, accepted_customer_id FROM Item WHERE accepted_offer_at IS NULL;";
+
+        try {
+            statement = connection.prepareStatement(sql);
+
+            result = statement.executeQuery();
+
+            while (result.next()) {
+                items.add(new Item(result.getLong("id"), result.getString("title"), result.getString("description"), result.getString("vaihdossa"), result.getLong("category_id"), result.getLong("customer_id"), result.getTimestamp("created_at"), result.getTimestamp("locked_at"), result.getLong("locked_customer_id"), result.getTimestamp("accepted_offer_at"), result.getLong("accepted_customer_id")));
             }
 
 
@@ -51,7 +79,7 @@ public class Items {
 
         ResultSet result = null;
 
-        String sql = "SELECT id, customer_id, category_id, title, description, vaihdossa, created_at, locked_at, locked_customer_id FROM Item ORDER BY created_at DESC LIMIT " + count + ";";
+        String sql = "SELECT id, customer_id, category_id, title, description, vaihdossa, created_at, locked_at, locked_customer_id, accepted_offer_at, accepted_customer_id FROM Item WHERE accepted_offer_at IS NULL ORDER BY created_at DESC LIMIT " + count + ";";
 
         try {
             statement = connection.prepareStatement(sql);
@@ -59,7 +87,7 @@ public class Items {
             result = statement.executeQuery();
 
             while (result.next()) {
-                items.add(new Item(result.getLong("id"), result.getString("title"), result.getString("description"), result.getString("vaihdossa"), result.getLong("category_id"), result.getLong("customer_id"), result.getTimestamp("created_at"), result.getTimestamp("locked_at"), result.getLong("locked_customer_id")));
+                items.add(new Item(result.getLong("id"), result.getString("title"), result.getString("description"), result.getString("vaihdossa"), result.getLong("category_id"), result.getLong("customer_id"), result.getTimestamp("created_at"), result.getTimestamp("locked_at"), result.getLong("locked_customer_id"), result.getTimestamp("accepted_offer_at"), result.getLong("accepted_customer_id")));
             }
 
 
@@ -79,7 +107,7 @@ public class Items {
 
         ResultSet result = null;
 
-        String sql = "SELECT id, customer_id, category_id, title, description, vaihdossa, created_at, locked_at, locked_customer_id FROM Item ORDER BY created_at DESC LIMIT " + count + ";";
+        String sql = "SELECT id, customer_id, category_id, title, description, vaihdossa, created_at, locked_at, locked_customer_id, accepted_offer_at, accepted_customer_id FROM Item WHERE accepted_offer_at IS NULL ORDER BY created_at DESC LIMIT " + count + ";";
 
         try {
             statement = connection.prepareStatement(sql);
@@ -87,7 +115,7 @@ public class Items {
             result = statement.executeQuery();
 
             while (result.next()) {
-                items.add(new Item(result.getLong("id"), result.getString("title"), result.getString("description"), result.getString("vaihdossa"), result.getLong("category_id"), result.getLong("customer_id"), result.getTimestamp("created_at"), result.getTimestamp("locked_at"), result.getLong("locked_customer_id")));
+                items.add(new Item(result.getLong("id"), result.getString("title"), result.getString("description"), result.getString("vaihdossa"), result.getLong("category_id"), result.getLong("customer_id"), result.getTimestamp("created_at"), result.getTimestamp("locked_at"), result.getLong("locked_customer_id"), result.getTimestamp("accepted_offer_at"), result.getLong("accepted_customer_id")));
             }
 
 
@@ -107,7 +135,7 @@ public class Items {
 
         ResultSet result = null;
 
-        String sql = "SELECT id, customer_id, category_id, title, description, vaihdossa, created_at, locked_at, locked_customer_id FROM Item WHERE customer_id = ?;";
+        String sql = "SELECT id, customer_id, category_id, title, description, vaihdossa, created_at, locked_at, locked_customer_id, accepted_offer_at, accepted_customer_id FROM Item WHERE customer_id = ?;";
 
         try {
             statement = connection.prepareStatement(sql);
@@ -117,7 +145,37 @@ public class Items {
             result = statement.executeQuery();
 
             while (result.next()) {
-                items.add(new Item(result.getLong("id"), result.getString("title"), result.getString("description"), result.getString("vaihdossa"), result.getLong("category_id"), result.getLong("customer_id"), result.getTimestamp("created_at"), result.getTimestamp("locked_at"), result.getLong("locked_customer_id")));
+                items.add(new Item(result.getLong("id"), result.getString("title"), result.getString("description"), result.getString("vaihdossa"), result.getLong("category_id"), result.getLong("customer_id"), result.getTimestamp("created_at"), result.getTimestamp("locked_at"), result.getLong("locked_customer_id"), result.getTimestamp("accepted_offer_at"), result.getLong("accepted_customer_id")));
+            }
+
+
+        } catch (Exception e) { Logger.error(e.toString()); }
+
+        try { statement.close(); } catch (SQLException e) { Logger.error(e.toString());  }
+
+        try { result.close(); } catch (SQLException e) { Logger.error(e.toString()); }
+
+        return items;
+    }
+
+    public List<Item> getOpenItemsByCustomerId(Long id) {
+        List<Item> items = new ArrayList<>();
+
+        PreparedStatement statement = null;
+
+        ResultSet result = null;
+
+        String sql = "SELECT id, customer_id, category_id, title, description, vaihdossa, created_at, locked_at, locked_customer_id, accepted_offer_at, accepted_customer_id FROM Item WHERE customer_id = ? AND accepted_offer_at IS NULL;";
+
+        try {
+            statement = connection.prepareStatement(sql);
+
+            statement.setLong(1, id);
+
+            result = statement.executeQuery();
+
+            while (result.next()) {
+                items.add(new Item(result.getLong("id"), result.getString("title"), result.getString("description"), result.getString("vaihdossa"), result.getLong("category_id"), result.getLong("customer_id"), result.getTimestamp("created_at"), result.getTimestamp("locked_at"), result.getLong("locked_customer_id"), result.getTimestamp("accepted_offer_at"), result.getLong("accepted_customer_id")));
             }
 
 
@@ -137,7 +195,7 @@ public class Items {
 
         ResultSet result = null;
 
-        String sql = "SELECT id, customer_id, category_id, title, description, vaihdossa, created_at, locked_at, locked_customer_id FROM Item WHERE category_id = ?;";
+        String sql = "SELECT id, customer_id, category_id, title, description, vaihdossa, created_at, locked_at, locked_customer_id, accepted_offer_at, accepted_customer_id FROM Item WHERE category_id = ?;";
 
         try {
             statement = connection.prepareStatement(sql);
@@ -147,7 +205,37 @@ public class Items {
             result = statement.executeQuery();
 
             while (result.next()) {
-                items.add(new Item(result.getLong("id"), result.getString("title"), result.getString("description"), result.getString("vaihdossa"), result.getLong("category_id"), result.getLong("customer_id"), result.getTimestamp("created_at"), result.getTimestamp("locked_at"), result.getLong("locked_customer_id")));
+                items.add(new Item(result.getLong("id"), result.getString("title"), result.getString("description"), result.getString("vaihdossa"), result.getLong("category_id"), result.getLong("customer_id"), result.getTimestamp("created_at"), result.getTimestamp("locked_at"), result.getLong("locked_customer_id"), result.getTimestamp("accepted_offer_at"), result.getLong("accepted_customer_id")));
+            }
+
+
+        } catch (Exception e) { Logger.error(e.toString()); }
+
+        try { statement.close(); } catch (SQLException e) { Logger.error(e.toString());  }
+
+        try { result.close(); } catch (SQLException e) { Logger.error(e.toString()); }
+
+        return items;
+    }
+
+    public List<Item> getOpenItemsByCategoryId(Long id) {
+        List<Item> items = new ArrayList<>();
+
+        PreparedStatement statement = null;
+
+        ResultSet result = null;
+
+        String sql = "SELECT id, customer_id, category_id, title, description, vaihdossa, created_at, locked_at, locked_customer_id, accepted_offer_at, accepted_customer_id FROM Item WHERE category_id = ? AND accepted_offer_at IS NULL;";
+
+        try {
+            statement = connection.prepareStatement(sql);
+
+            statement.setLong(1, id);
+
+            result = statement.executeQuery();
+
+            while (result.next()) {
+                items.add(new Item(result.getLong("id"), result.getString("title"), result.getString("description"), result.getString("vaihdossa"), result.getLong("category_id"), result.getLong("customer_id"), result.getTimestamp("created_at"), result.getTimestamp("locked_at"), result.getLong("locked_customer_id"), result.getTimestamp("accepted_offer_at"), result.getLong("accepted_customer_id")));
             }
 
 
@@ -165,7 +253,7 @@ public class Items {
 
         ResultSet result = null;
 
-        String sql = "SELECT id, customer_id, category_id, title, description, vaihdossa, created_at, locked_at, locked_customer_id FROM Item WHERE id = ?;";
+        String sql = "SELECT id, customer_id, category_id, title, description, vaihdossa, created_at, locked_at, locked_customer_id, accepted_offer_at, accepted_customer_id FROM Item WHERE id = ?;";
 
         try {
             statement = connection.prepareStatement(sql);
@@ -175,7 +263,7 @@ public class Items {
             result = statement.executeQuery();
 
             if (result.next()) {
-                return new Item(result.getLong("id"), result.getString("title"), result.getString("description"), result.getString("vaihdossa"), result.getLong("category_id"), result.getLong("customer_id"), result.getTimestamp("created_at"), result.getTimestamp("locked_at"), result.getLong("locked_customer_id"));
+                return new Item(result.getLong("id"), result.getString("title"), result.getString("description"), result.getString("vaihdossa"), result.getLong("category_id"), result.getLong("customer_id"), result.getTimestamp("created_at"), result.getTimestamp("locked_at"), result.getLong("locked_customer_id"), result.getTimestamp("accepted_offer_at"), result.getLong("accepted_customer_id"));
             }
 
 
@@ -282,7 +370,7 @@ public class Items {
 
         ResultSet result = null;
 
-        String sql = "SELECT id, customer_id, category_id, title, description, vaihdossa, created_at, locked_at, locked_customer_id FROM Item WHERE id IN (SELECT item_id FROM CounterOffer WHERE customer_id = ?)";
+        String sql = "SELECT id, customer_id, category_id, title, description, vaihdossa, created_at, locked_at, locked_customer_id, accepted_offer_at, accepted_customer_id FROM Item WHERE id IN (SELECT item_id FROM CounterOffer WHERE customer_id = ?)";
 
         try {
             statement = connection.prepareStatement(sql);
@@ -292,7 +380,37 @@ public class Items {
             result = statement.executeQuery();
 
             while (result.next()) {
-                items.add(new Item(result.getLong("id"), result.getString("title"), result.getString("description"), result.getString("vaihdossa"), result.getLong("category_id"), result.getLong("customer_id"), result.getTimestamp("created_at"), result.getTimestamp("locked_at"), result.getLong("locked_customer_id")));
+                items.add(new Item(result.getLong("id"), result.getString("title"), result.getString("description"), result.getString("vaihdossa"), result.getLong("category_id"), result.getLong("customer_id"), result.getTimestamp("created_at"), result.getTimestamp("locked_at"), result.getLong("locked_customer_id"), result.getTimestamp("accepted_offer_at"), result.getLong("accepted_customer_id")));
+            }
+
+
+        } catch (Exception e) { Logger.error(e.toString()); }
+
+        try { statement.close(); } catch (SQLException e) { Logger.error(e.toString());  }
+
+        try { result.close(); } catch (SQLException e) { Logger.error(e.toString()); }
+
+        return items;
+    }
+
+    public List<Item> getItemsForCustomerOffersByCustomerId(Long customer_id) {
+        List<Item> items = new ArrayList<>();
+
+        PreparedStatement statement = null;
+
+        ResultSet result = null;
+
+        String sql = "SELECT id, customer_id, category_id, title, description, vaihdossa, created_at, locked_at, locked_customer_id, accepted_offer_at, accepted_customer_id FROM Item WHERE locked_customer_id = ?";
+
+        try {
+            statement = connection.prepareStatement(sql);
+
+            statement.setLong(1, customer_id);
+
+            result = statement.executeQuery();
+
+            while (result.next()) {
+                items.add(new Item(result.getLong("id"), result.getString("title"), result.getString("description"), result.getString("vaihdossa"), result.getLong("category_id"), result.getLong("customer_id"), result.getTimestamp("created_at"), result.getTimestamp("locked_at"), result.getLong("locked_customer_id"), result.getTimestamp("accepted_offer_at"), result.getLong("accepted_customer_id")));
             }
 
 
@@ -341,6 +459,31 @@ public class Items {
             statement = connection.prepareStatement(sql);
 
             statement.setLong(1, id);
+
+            result = statement.executeUpdate();
+        } catch (Exception e) { Logger.error(e.toString()); }
+
+        try { statement.close(); } catch (SQLException e) { Logger.error(e.toString()); }
+
+        return result;
+    }
+
+    public int acceptOffer(Long id) {
+        String sql = "UPDATE Item SET accepted_offer_at = ?, accepted_customer_id = locked_customer_id WHERE id = ?;";
+
+        PreparedStatement statement = null;
+
+        int result = 0;
+
+        try {
+            statement = connection.prepareStatement(sql);
+
+            java.util.Date date = new java.util.Date(System.currentTimeMillis());
+            java.sql.Timestamp timestamp = new java.sql.Timestamp(date.getTime());
+
+            statement.setTimestamp(1, timestamp);
+
+            statement.setLong(2, id);
 
             result = statement.executeUpdate();
         } catch (Exception e) { Logger.error(e.toString()); }
