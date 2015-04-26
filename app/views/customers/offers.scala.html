@@ -9,6 +9,7 @@
         <thead>
         <tr>
             <th>Tavara</th>
+            <th>Kategoria</th>
             <th>Ilmoittaja</th>
             <th>Ilmoitus jätetty</th>
             <th>Tarjous jätetty</th>
@@ -19,6 +20,7 @@
         @for(item <- items_open) {
         <tr>
             <td><a href="@routes.ItemController.show(item.getId())">@item.getTitle()</a></td>
+            <td><a href="@routes.CategoryController.show(item.getCategoryId())">@Category.getCategoryById(item.getCategoryId()).getTitle()</a></td>
             <td><a href="@routes.CustomerController.show(item.getCustomerId())">@item.getOwner().getUsername()</a></td>
             <td>@item.getTimestamp()</td>
             <td>@item.getLockedAtTimestamp()</td>
@@ -32,6 +34,7 @@
         <thead>
         <tr>
             <th>Tavara</th>
+            <th>Kategoria</th>
             <th>Ilmoittaja</th>
             <th>Ilmoitus jätetty</th>
             <th>Tarjous jätetty</th>
@@ -42,6 +45,7 @@
         @for(item <- items_accepted) {
         <tr>
             <td><a href="@routes.ItemController.show(item.getId())">@item.getTitle()</a></td>
+            <td><a href="@routes.CategoryController.show(item.getCategoryId())">@Category.getCategoryById(item.getCategoryId()).getTitle()</a></td>
             <td><a href="@routes.CustomerController.show(item.getCustomerId())">@item.getOwner().getUsername()</a></td>
             <td>@item.getTimestamp()</td>
             <td>@item.getLockedAtTimestamp()</td>

@@ -1,18 +1,18 @@
-@(items: List[Item], categories: Categories, current_category: Category)
+@(items: List[Item], current_category: Category)
 
 @layouts.main_template("Tavaranvaihto") {
 <div>
     <p><strong>Kategoria</strong></p>
 
     <p>
-        @for(category <- categories.getCategories()) {
-        @if(categories.getItemsCount(category.getId()) > 0) {
+        @for(category <- Category.getCategories()) {
+        @if(Category.getItemsCount(category.getId()) > 0) {
             @if(current_category.getId() == category.getId()) {
         <button class="btn btn-primary" disabled="disabled">@category.getTitle() <span
-                class="badge">@categories.getItemsCount(category.getId())</span></button>
+                class="badge">@Category.getItemsCount(category.getId())</span></button>
         } else {
         <a href="@routes.CategoryController.show(category.getId())" class="btn btn-success">@category.getTitle() <span
-                class="badge">@categories.getItemsCount(category.getId())</span></a>
+                class="badge">@Category.getItemsCount(category.getId())</span></a>
         }
         }
         }

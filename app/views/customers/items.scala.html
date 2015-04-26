@@ -1,4 +1,4 @@
-@(items_open: List[Item], items_accepted: List[Item], categories: Categories)
+@(items_open: List[Item], items_accepted: List[Item])
 
 @layouts.main_template("Tavaranvaihto") {
 <div>
@@ -42,7 +42,7 @@
             }
             }
 
-            <td><a href="@routes.CategoryController.show(item.getCategoryId())">@categories.getCategoryById(item.getCategoryId()).getTitle()</a></td>
+            <td><a href="@routes.CategoryController.show(item.getCategoryId())">@Category.getCategoryById(item.getCategoryId()).getTitle()</a></td>
             <td>@item.getCounterOffersCount()</td>
             <td>@item.getTimestamp()</td>
         </tr>
@@ -81,7 +81,7 @@
             }
             }
 
-            <td><a href="@routes.CategoryController.show(item.getCategoryId())">@categories.getCategoryById(item.getCategoryId()).getTitle()</a></td>
+            <td><a href="@routes.CategoryController.show(item.getCategoryId())">@Category.getCategoryById(item.getCategoryId()).getTitle()</a></td>
             <td>@item.getCounterOffersCount()</td>
             <td>@item.getTimestamp()</td>
         </tr>

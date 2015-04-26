@@ -15,10 +15,9 @@ import java.util.List;
  */
 public class ItemController extends Controller {
     private static Items items = new Items();
-    private static Categories categories = new Categories();
 
     public static Result all() {
-        return ok(views.html.items.all.render(items.getOpenItems(), categories));
+        return ok(views.html.items.all.render(items.getOpenItems()));
     }
 
     public static Result show(Long id) {
@@ -31,7 +30,7 @@ public class ItemController extends Controller {
 
         Logger.error(Long.toString(item.getCustomerId()));
         Customer customer = new Customers().getCustomerById(item.getCustomerId());
-        Category category = categories.getCategoryById(item.getCategoryId());
+        Category category = Category.getCategoryById(item.getCategoryId());
 
         CounterOffer currentCustomerCounterOffer = new CounterOffers().getCounterOfferForItemByCustomerId(id, Long.parseLong(session().get("customer_id")));
         List<CounterOffer> counterOffers = new CounterOffers().getCounterOffersForItem(id);
@@ -58,7 +57,7 @@ public class ItemController extends Controller {
         /* TODO: NewItemForm <-> Item */
         Form<ItemForm> filledItemForm = newItemForm.fill(new ItemForm(item.getTitle(), item.getDescription(), item.getVaihdossa()));
 
-        return ok(views.html.items.edit.render(id, play.libs.Scala.toSeq(categories.getCategoriesAsScalaTupleList()), filledItemForm));
+        return ok(views.html.items.edit.render(id, play.libs.Scala.toSeq(Category.getCategoriesAsScalaTupleList()), filledItemForm));
     }
 
     @Security.Authenticated(Secured.class)
@@ -76,7 +75,7 @@ public class ItemController extends Controller {
         Form<ItemForm> itemForm = Form.form(ItemForm.class).bindFromRequest();
 
         if (itemForm.hasErrors()) {
-            return badRequest(views.html.items.edit.render(id, play.libs.Scala.toSeq(categories.getCategoriesAsScalaTupleList()), itemForm));
+            return badRequest(views.html.items.edit.render(id, play.libs.Scala.toSeq(Category.getCategoriesAsScalaTupleList()), itemForm));
         } else {
             ItemForm item = itemForm.get();
             if (item == null)
@@ -91,7 +90,7 @@ public class ItemController extends Controller {
             } else {
                 flash("error", "Ilmoituksen tietojen päivittäminen epäonnistui.");
 
-                return badRequest(views.html.items.edit.render(id, play.libs.Scala.toSeq(categories.getCategoriesAsScalaTupleList()), itemForm));
+                return badRequest(views.html.items.edit.render(id, play.libs.Scala.toSeq(Category.getCategoriesAsScalaTupleList()), itemForm));
             }
         }
     }
@@ -119,7 +118,7 @@ public class ItemController extends Controller {
             flash("error", "Ilmoituksen poistaminen epäonnistui.");
 
             Customer customer = new Customers().getCustomerById(item.getCustomerId());
-            Category category = categories.getCategoryById(item.getCategoryId());
+            Category category = Category.getCategoryById(item.getCategoryId());
             CounterOffer currentCustomerCounterOffer = new CounterOffers().getCounterOfferForItemByCustomerId(id, Long.parseLong(session().get("customer_id")));
             List<CounterOffer> counterOffers = new CounterOffers().getCounterOffersForItem(id);
             return ok(views.html.items.show.render(id, item, customer, category, currentCustomerCounterOffer, counterOffers));
@@ -130,7 +129,7 @@ public class ItemController extends Controller {
     public static Result new_item() {
         Form<ItemForm> newItemForm = Form.form(ItemForm.class);
 
-        return ok(views.html.items.add.render(play.libs.Scala.toSeq(categories.getCategoriesAsScalaTupleList()), newItemForm));
+        return ok(views.html.items.add.render(play.libs.Scala.toSeq(Category.getCategoriesAsScalaTupleList()), newItemForm));
     }
 
     @Security.Authenticated(Secured.class)
@@ -138,7 +137,7 @@ public class ItemController extends Controller {
         Form<ItemForm> newItemForm = Form.form(ItemForm.class).bindFromRequest();
 
         if (newItemForm.hasErrors()) {
-            return badRequest(views.html.items.add.render(play.libs.Scala.toSeq(categories.getCategoriesAsScalaTupleList()), newItemForm));
+            return badRequest(views.html.items.add.render(play.libs.Scala.toSeq(Category.getCategoriesAsScalaTupleList()), newItemForm));
         } else {
             ItemForm item = newItemForm.get();
 
@@ -151,7 +150,7 @@ public class ItemController extends Controller {
             } else {
                 flash("error", "Ilmoituksen lisääminen epäonnistui.");
 
-                return badRequest(views.html.items.add.render(play.libs.Scala.toSeq(categories.getCategoriesAsScalaTupleList()), newItemForm));
+                return badRequest(views.html.items.add.render(play.libs.Scala.toSeq(Category.getCategoriesAsScalaTupleList()), newItemForm));
             }
         }
     }
@@ -179,7 +178,7 @@ public class ItemController extends Controller {
             flash("error", "Ilmoituksen lukitseminen epäonnistui.");
 
             Customer customer = new Customers().getCustomerById(item.getCustomerId());
-            Category category = categories.getCategoryById(item.getCategoryId());
+            Category category = Category.getCategoryById(item.getCategoryId());
             CounterOffer currentCustomerCounterOffer = new CounterOffers().getCounterOfferForItemByCustomerId(id, Long.parseLong(session().get("customer_id")));
             List<CounterOffer> counterOffers = new CounterOffers().getCounterOffersForItem(id);
             return ok(views.html.items.show.render(id, item, customer, category, currentCustomerCounterOffer, counterOffers));
@@ -204,7 +203,7 @@ public class ItemController extends Controller {
             flash("error", "Ilmoituksen lukituksen poistaminen epäonnistui.");
 
             Customer customer = new Customers().getCustomerById(item.getCustomerId());
-            Category category = categories.getCategoryById(item.getCategoryId());
+            Category category = Category.getCategoryById(item.getCategoryId());
             CounterOffer currentCustomerCounterOffer = new CounterOffers().getCounterOfferForItemByCustomerId(id, Long.parseLong(session().get("customer_id")));
             List<CounterOffer> counterOffers = new CounterOffers().getCounterOffersForItem(id);
             return ok(views.html.items.show.render(id, item, customer, category, currentCustomerCounterOffer, counterOffers));
@@ -226,7 +225,7 @@ public class ItemController extends Controller {
             flash("error", "Tarjouksen hyväksyminen epäonnistui.");
 
             Customer customer = new Customers().getCustomerById(item.getCustomerId());
-            Category category = categories.getCategoryById(item.getCategoryId());
+            Category category = Category.getCategoryById(item.getCategoryId());
             CounterOffer currentCustomerCounterOffer = new CounterOffers().getCounterOfferForItemByCustomerId(id, Long.parseLong(session().get("customer_id")));
             List<CounterOffer> counterOffers = new CounterOffers().getCounterOffersForItem(id);
             return ok(views.html.items.show.render(id, item, customer, category, currentCustomerCounterOffer, counterOffers));

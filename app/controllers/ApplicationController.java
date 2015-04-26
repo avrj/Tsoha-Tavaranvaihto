@@ -1,6 +1,5 @@
 package controllers;
 
-import models.Categories;
 import models.Customer;
 import models.Customers;
 import models.Items;
@@ -14,9 +13,7 @@ public class ApplicationController extends Controller {
     private static Items items = new Items();
 
     public static Result index() {
-        Categories categories = new Categories();
-
-        return ok(views.html.index.render(items.getLatestItems(5), items.getMostPopularItems(5), categories));
+        return ok(views.html.index.render(items.getLatestItems(5), items.getMostPopularItems(5)));
     }
 
     public static String getCurrentCustomer() {

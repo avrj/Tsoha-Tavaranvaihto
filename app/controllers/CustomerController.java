@@ -33,16 +33,14 @@ public class CustomerController extends Controller {
             return redirect(routes.ItemController.all());
 
         Items items = new Items();
-        Categories categories = new Categories();
-        return ok(views.html.customers.show.render(items.getOpenItemsByCustomerId(id), customer, categories));
+        return ok(views.html.customers.show.render(items.getOpenItemsByCustomerId(id), customer));
     }
 
     @Security.Authenticated(Secured.class)
     public static Result items() {
         Items items = new Items();
-        Categories categories = new Categories();
 
-        return ok(views.html.customers.items.render(items.getItemsOpenByCustomerId(Long.parseLong(session().get("customer_id"))), items.getItemsAcceptedByCustomerId(Long.parseLong(session().get("customer_id"))), categories));
+        return ok(views.html.customers.items.render(items.getItemsOpenByCustomerId(Long.parseLong(session().get("customer_id"))), items.getItemsAcceptedByCustomerId(Long.parseLong(session().get("customer_id")))));
     }
 
     @Security.Authenticated(Secured.class)

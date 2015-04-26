@@ -40,7 +40,7 @@ public class CounterOfferController extends Controller {
             return redirect(routes.ItemController.show(id));
         } else {
             Customer customer = new Customers().getCustomerById(item.getCustomerId());
-            Category category = new Categories().getCategoryById(item.getCategoryId());
+            Category category = Category.getCategoryById(item.getCategoryId());
             CounterOffer currentCustomerCounterOffer = new CounterOffers().getCounterOfferForItemByCustomerId(id, Long.parseLong(session().get("customer_id")));
             List<CounterOffer> counterOffers = new CounterOffers().getCounterOffersForItem(id);
 
@@ -67,7 +67,7 @@ public class CounterOfferController extends Controller {
             return redirect(routes.ItemController.show(id));
         } else {
             Customer customer = new Customers().getCustomerById(item.getCustomerId());
-            Category category = new Categories().getCategoryById(item.getCategoryId());
+            Category category = Category.getCategoryById(item.getCategoryId());
             CounterOffer currentCustomerCounterOffer = new CounterOffers().getCounterOfferForItemByCustomerId(id, Long.parseLong(session().get("customer_id")));
             List<CounterOffer> counterOffers = new CounterOffers().getCounterOffersForItem(id);
 

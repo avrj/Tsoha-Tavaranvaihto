@@ -1,14 +1,14 @@
-@(items: List[Item], categories: Categories)
+@(items: List[Item])
 
 @layouts.main_template("Tavaranvaihto") {
 <div>
     <p><strong>Kategoria</strong></p>
 
     <p>
-        @for(category <- categories.getCategories()) {
-        @if(categories.getItemsCount(category.getId()) > 0) {
+        @for(category <- Category.getCategories()) {
+        @if(Category.getItemsCount(category.getId()) > 0) {
         <a href="@routes.CategoryController.show(category.getId())" class="btn btn-success">@category.getTitle() <span
-                class="badge">@categories.getItemsCount(category.getId())</span></a>
+                class="badge">@Category.getItemsCount(category.getId())</span></a>
         }
         }
     </p>
@@ -26,6 +26,7 @@
         <thead>
         <tr>
             <th>Tavara</th>
+            <th>Kategoria</th>
             <th>Vastatarjoukset</th>
             <th>Ilmoittaja</th>
             <th>Ilmoitus jätetty</th>
@@ -35,6 +36,7 @@
         @for(item <- items) {
         <tr>
             <td><a href="@routes.ItemController.show(item.getId())">@item.getTitle()</a></td>
+            <td><a href="@routes.CategoryController.show(item.getCategoryId())">@Category.getCategoryById(item.getCategoryId()).getTitle()</a></td>
             <td>@item.getCounterOffersCount()</td>
             <td><a href="@routes.CustomerController.show(item.getCustomerId())">@item.getOwner().getUsername()</a></td>
             <td>@item.getTimestamp()</td>
