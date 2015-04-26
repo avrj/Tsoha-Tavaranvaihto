@@ -23,7 +23,7 @@
         @for(item <- items) {
         <tr>
             <td><a href="@routes.ItemController.show(item.getCustomerId())">@item.getTitle()</a></td>
-            <td>@categories.getCategoryById(item.getCategoryId()).getTitle()</td>
+            <td><a href="@routes.CategoryController.show(item.getCategoryId())">@categories.getCategoryById(item.getCategoryId()).getTitle()</a></td>
             <td>0</td>
             <td>@item.getTimestamp()</td>
         </tr>

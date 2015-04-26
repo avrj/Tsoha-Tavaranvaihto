@@ -18,19 +18,24 @@ public class CounterOfferController extends Controller {
     public static Result add(Long id) {
         Item item = new Items().getItemById(id);
 
-        if(item == null)
+        if (item == null)
             return redirect(routes.ItemController.all());
 
-        if(item.getCustomerId() == Long.parseLong(session().get("customer_id"))) {
+        if (item.getCustomerId() == Long.parseLong(session().get("customer_id"))) {
             flash("error", "Et voi tehdä vastatarjouksia omiin ilmoituksiisi.");
             return redirect(routes.ItemController.show(id));
         }
 
         DynamicForm requestData = Form.form().bindFromRequest();
 
+        if(requestData.get("counteroffer_description") == "") {
+            flash("error", "Vastatarjous ei voi olla tyhjä.");
+            return redirect(routes.ItemController.show(id));
+        }
+
         int counterOfferStatus = new CounterOffers().createCounterOffer(Long.parseLong(session().get("customer_id")), id, requestData.get("counteroffer_description"));
 
-        if(counterOfferStatus > 0) {
+        if (counterOfferStatus > 0) {
             flash("success", "Vastatarjous lisätty onnistuneesti.");
             return redirect(routes.ItemController.show(id));
         } else {
@@ -47,17 +52,17 @@ public class CounterOfferController extends Controller {
     public static Result delete(Long id) {
         Item item = new Items().getItemById(id);
 
-        if(item == null)
+        if (item == null)
             return redirect(routes.ItemController.all());
 
-        if(item.getCustomerId() == Long.parseLong(session().get("customer_id"))) {
+        if (item.getCustomerId() == Long.parseLong(session().get("customer_id"))) {
             flash("error", "Et voi tehdä vastatarjouksia omiin ilmoituksiisi.");
             return redirect(routes.ItemController.show(id));
         }
 
         int counterOfferStatus = new CounterOffers().deleteCounterOffer(id, Long.parseLong(session().get("customer_id")));
 
-        if(counterOfferStatus > 0) {
+        if (counterOfferStatus > 0) {
             flash("success", "Vastatarjous poistettu onnistuneesti.");
             return redirect(routes.ItemController.show(id));
         } else {

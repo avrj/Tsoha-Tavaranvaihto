@@ -1,13 +1,21 @@
-@(items: List[Item], categories: Categories)
+@(items_open: List[Item], items_accepted: List[Item], categories: Categories)
 
 @layouts.main_template("Tavaranvaihto") {
 <div>
     <h2>Omat ilmoitukset</h2>
 
-    @if(items.size() == 1) {
+    @if(items_open.size()+items_accepted.size() == 1) {
     <p>Yhteensä 1 ilmoitus</p>
     } else {
-    <p>Yhteensä @items.size() ilmoitusta</p>
+    <p>Yhteensä @(items_open.size()+items_accepted.size()) ilmoitusta</p>
+    }
+
+    <h3>Avoimet</h3>
+
+    @if(items_open.size() == 1) {
+    <p>Yhteensä 1 ilmoitus</p>
+    } else {
+    <p>Yhteensä @items_open.size() ilmoitusta</p>
     }
 
     <table class="table table-striped">
@@ -20,19 +28,60 @@
         </tr>
         </thead>
         <tbody>
-        @for(item <- items) {
+        @for(item <- items_open) {
         <tr>
             @if(item.getLockedAtTimestamp() == null) {
-                <td><a href="@routes.ItemController.show(item.getId())">@item.getTitle()</a></td>
+            <td><a href="@routes.ItemController.show(item.getId())">@item.getTitle()</a></td>
             } else {
-                @if(item.getAcceptedOfferAt() == null) {
-                    <td><a href="@routes.ItemController.show(item.getId())"><span class="glyphicon glyphicon-lock"></span> @item.getTitle()</a></td>
-                } else {
-                    <td><a href="@routes.ItemController.show(item.getId())"><span class="glyphicon glyphicon-ok"></span> @item.getTitle()</a></td>
-                }
+            @if(item.getAcceptedOfferAt() == null) {
+            <td><a href="@routes.ItemController.show(item.getId())"><span class="glyphicon glyphicon-lock"></span>
+                @item.getTitle()</a></td>
+            } else {
+            <td><a href="@routes.ItemController.show(item.getId())"><span class="glyphicon glyphicon-ok"></span>
+                @item.getTitle()</a></td>
+            }
             }
 
-            <td>@categories.getCategoryById(item.getCategoryId()).getTitle()</td>
+            <td><a href="@routes.CategoryController.show(item.getCategoryId())">@categories.getCategoryById(item.getCategoryId()).getTitle()</a></td>
+            <td>@item.getCounterOffersCount()</td>
+            <td>@item.getTimestamp()</td>
+        </tr>
+        }
+        </tbody>
+    </table>
+
+    <h3>Hyväksytyt</h3>
+    @if(items_accepted.size() == 1) {
+    <p>Yhteensä 1 ilmoitus</p>
+    } else {
+    <p>Yhteensä @items_accepted.size() ilmoitusta</p>
+    }
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Tavara</th>
+            <th>Kategoria</th>
+            <th>Vastatarjoukset</th>
+            <th>Ilmoitus jätetty</th>
+        </tr>
+        </thead>
+        <tbody>
+        @for(item <- items_accepted) {
+        <tr>
+            @if(item.getLockedAtTimestamp() == null) {
+            <td><a href="@routes.ItemController.show(item.getId())">@item.getTitle()</a></td>
+            } else {
+            @if(item.getAcceptedOfferAt() == null) {
+            <td><a href="@routes.ItemController.show(item.getId())"><span class="glyphicon glyphicon-lock"></span>
+                @item.getTitle()</a></td>
+            } else {
+            <td><a href="@routes.ItemController.show(item.getId())"><span class="glyphicon glyphicon-ok"></span>
+                @item.getTitle()</a></td>
+            }
+            }
+
+            <td><a href="@routes.CategoryController.show(item.getCategoryId())">@categories.getCategoryById(item.getCategoryId()).getTitle()</a></td>
             <td>@item.getCounterOffersCount()</td>
             <td>@item.getTimestamp()</td>
         </tr>

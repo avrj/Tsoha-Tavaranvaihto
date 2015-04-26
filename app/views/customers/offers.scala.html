@@ -1,9 +1,10 @@
-@(items: List[Item])
+@(items_open: List[Item], items_accepted: List[Item])
 
 @layouts.main_template("Tavaranvaihto") {
 <div>
     <h2>Omat tarjoukset</h2>
 
+    <h3>Avoimet</h3>
     <table class="table table-striped">
         <thead>
         <tr>
@@ -12,18 +13,39 @@
             <th>Ilmoitus jätetty</th>
             <th>Tarjous jätetty</th>
             <th>Poistuu</th>
-            <th>Tila</th>
         </tr>
         </thead>
         <tbody>
-        @for(item <- items) {
+        @for(item <- items_open) {
         <tr>
             <td><a href="@routes.ItemController.show(item.getId())">@item.getTitle()</a></td>
             <td><a href="@routes.CustomerController.show(item.getCustomerId())">@item.getOwner().getUsername()</a></td>
             <td>@item.getTimestamp()</td>
             <td>@item.getLockedAtTimestamp()</td>
             <td>@item.getLockExpiresAtTimestamp()</td>
-            <td>Odottaa hyväksymistä</td>
+        </tr>
+        }
+        </tbody>
+    </table>
+    <h3>Hyväksytyt</h3>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Tavara</th>
+            <th>Ilmoittaja</th>
+            <th>Ilmoitus jätetty</th>
+            <th>Tarjous jätetty</th>
+            <th>Hyväksytty</th>
+        </tr>
+        </thead>
+        <tbody>
+        @for(item <- items_accepted) {
+        <tr>
+            <td><a href="@routes.ItemController.show(item.getId())">@item.getTitle()</a></td>
+            <td><a href="@routes.CustomerController.show(item.getCustomerId())">@item.getOwner().getUsername()</a></td>
+            <td>@item.getTimestamp()</td>
+            <td>@item.getLockedAtTimestamp()</td>
+            <td>@item.getAcceptedOfferAt()</td>
         </tr>
         }
         </tbody>

@@ -12,6 +12,7 @@ import java.sql.*;
 
 public class ApplicationController extends Controller {
     private static Items items = new Items();
+
     public static Result index() {
         Categories categories = new Categories();
 
@@ -19,12 +20,12 @@ public class ApplicationController extends Controller {
     }
 
     public static String getCurrentCustomer() {
-        if(session().get("customer_id").isEmpty())
+        if (session().get("customer_id").isEmpty())
             return null;
 
         Customer customer = new Customers().getCustomerById(Long.parseLong(session().get("customer_id")));
 
-        if(customer == null)
+        if (customer == null)
             return null;
 
         return customer.getUsername();

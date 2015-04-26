@@ -26,7 +26,7 @@ public class ItemController extends Controller {
         java.sql.Timestamp timestamp = new java.sql.Timestamp(date.getTime());
 
         Item item = items.getItemById(id);
-        if(item == null)
+        if (item == null)
             return redirect(routes.ItemController.all());
 
         Logger.error(Long.toString(item.getCustomerId()));
@@ -42,12 +42,12 @@ public class ItemController extends Controller {
     public static Result edit(Long id) {
         Item item = items.getItemById(id);
 
-        if(item.getCustomerId() != Long.parseLong(session().get("customer_id"))) {
+        if (item.getCustomerId() != Long.parseLong(session().get("customer_id"))) {
             flash("error", "Voit muokata vain omia ilmoituksiasi.");
             return redirect(routes.ItemController.show(id));
         }
 
-        if(item == null)
+        if (item == null)
             return redirect(routes.ItemController.all());
 
         Form<ItemForm> newItemForm = Form.form(ItemForm.class);
@@ -65,10 +65,10 @@ public class ItemController extends Controller {
     public static Result update(Long id) {
         Item cur_item = items.getItemById(id);
 
-        if(cur_item == null)
+        if (cur_item == null)
             return redirect(routes.ItemController.all());
 
-        if(cur_item.getCustomerId() != Long.parseLong(session().get("customer_id"))) {
+        if (cur_item.getCustomerId() != Long.parseLong(session().get("customer_id"))) {
             flash("error", "Voit muokata vain omia ilmoituksiasi.");
             return redirect(routes.ItemController.show(id));
         }
@@ -79,12 +79,12 @@ public class ItemController extends Controller {
             return badRequest(views.html.items.edit.render(id, play.libs.Scala.toSeq(categories.getCategoriesAsScalaTupleList()), itemForm));
         } else {
             ItemForm item = itemForm.get();
-            if(item == null)
+            if (item == null)
                 return redirect(routes.ItemController.all());
 
             int itemStatus = items.updateItem(id, item.category, item.title, item.description, item.vaihdossa);
 
-            if(itemStatus > 0) {
+            if (itemStatus > 0) {
                 flash("success", "Ilmoituksen tiedot on nyt päivitetty.");
 
                 return redirect(routes.ItemController.show(id));
@@ -100,10 +100,10 @@ public class ItemController extends Controller {
     public static Result delete(Long id) {
         Item item = items.getItemById(id);
 
-        if(item == null)
+        if (item == null)
             return redirect(routes.ItemController.all());
 
-        if(item.getCustomerId() != Long.parseLong(session().get("customer_id"))) {
+        if (item.getCustomerId() != Long.parseLong(session().get("customer_id"))) {
             flash("error", "Voit poistaa vain omia ilmoituksiasi.");
             return redirect(routes.ItemController.show(id));
         }
@@ -111,7 +111,7 @@ public class ItemController extends Controller {
         /*
             TODO: must belong to current user
          */
-        if(items.deleteItem(id) > 0) {
+        if (items.deleteItem(id) > 0) {
             flash("success", "Ilmoitus poistettu.");
 
             return redirect(routes.ItemController.all());
@@ -144,7 +144,7 @@ public class ItemController extends Controller {
 
             int itemStatus = items.createItem(Integer.parseInt(session().get("customer_id")), item.category, item.title, item.description, item.vaihdossa);
 
-            if(itemStatus > 0) {
+            if (itemStatus > 0) {
                 flash("success", "Ilmoitus lisätty!");
 
                 return redirect(routes.ItemController.all());
@@ -160,10 +160,10 @@ public class ItemController extends Controller {
     public static Result lock(Long id) {
         Item item = items.getItemById(id);
 
-        if(item == null)
+        if (item == null)
             return redirect(routes.ItemController.all());
 
-        if(item.getCustomerId() == Long.parseLong(session().get("customer_id"))) {
+        if (item.getCustomerId() == Long.parseLong(session().get("customer_id"))) {
             flash("error", "Et voi lukita omia ilmoituksiasi.");
             return redirect(routes.ItemController.show(id));
         }
@@ -171,7 +171,7 @@ public class ItemController extends Controller {
         /*
             TODO: customer cannot lock item that is already locked
          */
-        if(items.lockItem(id, Long.parseLong(session().get("customer_id"))) > 0) {
+        if (items.lockItem(id, Long.parseLong(session().get("customer_id"))) > 0) {
             flash("success", "Ilmoitus lukittu.");
 
             return redirect(routes.ItemController.show(id));
@@ -190,13 +190,13 @@ public class ItemController extends Controller {
     public static Result unlock(Long id) {
         Item item = items.getItemById(id);
 
-        if(item == null)
+        if (item == null)
             return redirect(routes.ItemController.all());
 
         /*
             TODO: customer cannot unlock item that belongs to another customer
          */
-        if(items.unlockItem(id) > 0) {
+        if (items.unlockItem(id) > 0) {
             flash("success", "Ilmoituksen lukitus poistettu.");
 
             return redirect(routes.ItemController.show(id));
@@ -215,10 +215,10 @@ public class ItemController extends Controller {
     public static Result acceptOffer(Long id) {
         Item item = items.getItemById(id);
 
-        if(item == null)
+        if (item == null)
             return redirect(routes.ItemController.all());
 
-        if(items.acceptOffer(id) > 0) {
+        if (items.acceptOffer(id) > 0) {
             flash("success", "Tarjous hyväksytty.");
 
             return redirect(routes.ItemController.show(id));
@@ -231,5 +231,9 @@ public class ItemController extends Controller {
             List<CounterOffer> counterOffers = new CounterOffers().getCounterOffersForItem(id);
             return ok(views.html.items.show.render(id, item, customer, category, currentCustomerCounterOffer, counterOffers));
         }
+    }
+
+    public static void deleteExpiredOffers() {
+        items.deleteExpiredOffers();
     }
 }

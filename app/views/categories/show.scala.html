@@ -1,4 +1,4 @@
-@(items: List[Item], categories: Categories)
+@(items: List[Item], categories: Categories, current_category: Category)
 
 @layouts.main_template("Tavaranvaihto") {
 <div>
@@ -6,19 +6,29 @@
 
     <p>
         @for(category <- categories.getCategories()) {
-            @if(categories.getItemsCount(category.getId()) > 0) {
-                <a href="@routes.CategoryController.show(category.getId())" class="btn btn-success">@category.getTitle() <span class="badge">@categories.getItemsCount(category.getId())</span></a>
-            }
+        @if(categories.getItemsCount(category.getId()) > 0) {
+            @if(current_category.getId() == category.getId()) {
+        <button class="btn btn-primary" disabled="disabled">@category.getTitle() <span
+                class="badge">@categories.getItemsCount(category.getId())</span></button>
+        } else {
+        <a href="@routes.CategoryController.show(category.getId())" class="btn btn-success">@category.getTitle() <span
+                class="badge">@categories.getItemsCount(category.getId())</span></a>
+        }
+        }
         }
     </p>
 </div>
 <div>
-    <h2>Tavarat</h2>
+    @if(current_category == null) {
+        <h1>Ilmoitukset</h1>
+    } else {
+        <h2>Ilmoitukset kategoriassa @current_category.getTitle()</h2>
+    }
 
     @if(items.size() == 1) {
-    <p>Yhteensä 1 tavara</p>
+    <p>Yhteensä 1 ilmoitus</p>
     } else {
-    <p>Yhteensä @items.size() tavaraa</p>
+    <p>Yhteensä @items.size() ilmoitusta</p>
     }
 
     <table class="table table-striped">

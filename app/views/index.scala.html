@@ -1,56 +1,56 @@
 @(latest_items: List[Item], most_popular_items: List[Item], categories: Categories)
 
 @layouts.main_template("Tavaranvaihto") {
-    <div>
-        <h2>Viimeisimmät vaihtoon ilmoitetut tavarat</h2>
+<div>
+    <h2>Viimeisimmät vaihtoon ilmoitetut tavarat</h2>
 
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th>Tavara</th>
-                <th>Kategoria</th>
-                <th>Vastatarjoukset</th>
-                <th>Lisääjä</th>
-                <th>Ilmoitus jätetty</th>
-            </tr>
-            </thead>
-            <tbody>
-            @for(item <- latest_items) {
-            <tr>
-                <td><a href="@routes.ItemController.show(item.getId())">@item.getTitle()</a></td>
-                <td>@categories.getCategoryById(item.getCategoryId()).getTitle()</td>
-                <td>@item.getCounterOffersCount()</td>
-                <td><a href="@routes.CustomerController.show(item.getCustomerId())">@item.getOwner().getUsername()</a></td>
-                <td>@item.getTimestamp()</td>
-            </tr>
-            }
-            </tbody>
-        </table>
-    </div>
-    <div>
-        <h2>Suosituimmat</h2>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Tavara</th>
+            <th>Kategoria</th>
+            <th>Vastatarjoukset</th>
+            <th>Lisääjä</th>
+            <th>Ilmoitus jätetty</th>
+        </tr>
+        </thead>
+        <tbody>
+        @for(item <- latest_items) {
+        <tr>
+            <td><a href="@routes.ItemController.show(item.getId())">@item.getTitle()</a></td>
+            <td><a href="@routes.CategoryController.show(item.getCategoryId())">@categories.getCategoryById(item.getCategoryId()).getTitle()</a></td>
+            <td>@item.getCounterOffersCount()</td>
+            <td><a href="@routes.CustomerController.show(item.getCustomerId())">@item.getOwner().getUsername()</a></td>
+            <td>@item.getTimestamp()</td>
+        </tr>
+        }
+        </tbody>
+    </table>
+</div>
+<div>
+    <h2>Suosituimmat</h2>
 
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th>Tavara</th>
-                <th>Kategoria</th>
-                <th>Vastatarjoukset</th>
-                <th>Lisääjä</th>
-                <th>Ilmoitus jätetty</th>
-            </tr>
-            </thead>
-            <tbody>
-            @for(item <- most_popular_items) {
-            <tr>
-                <td><a href="@routes.ItemController.show(item.getId())">@item.getTitle()</a></td>
-                <td>@categories.getCategoryById(item.getCategoryId()).getTitle()</td>
-                <td>@item.getCounterOffersCount()</td>
-                <td><a href="@routes.CustomerController.show(item.getCustomerId())">@item.getOwner().getUsername()</a></td>
-                <td>@item.getTimestamp()</td>
-            </tr>
-            }
-            </tbody>
-        </table>
-    </div>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Tavara</th>
+            <th>Kategoria</th>
+            <th>Vastatarjoukset</th>
+            <th>Lisääjä</th>
+            <th>Ilmoitus jätetty</th>
+        </tr>
+        </thead>
+        <tbody>
+        @for(item <- most_popular_items) {
+        <tr>
+            <td><a href="@routes.ItemController.show(item.getId())">@item.getTitle()</a></td>
+            <td><a href="@routes.CategoryController.show(item.getCategoryId())">@categories.getCategoryById(item.getCategoryId()).getTitle()</a></td>
+            <td>@item.getCounterOffersCount()</td>
+            <td><a href="@routes.CustomerController.show(item.getCustomerId())">@item.getOwner().getUsername()</a></td>
+            <td>@item.getTimestamp()</td>
+        </tr>
+        }
+        </tbody>
+    </table>
+</div>
 }

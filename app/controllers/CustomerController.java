@@ -29,7 +29,7 @@ public class CustomerController extends Controller {
     public static Result show(Long id) {
         Customer customer = customers.getCustomerById(id);
 
-        if(customer == null)
+        if (customer == null)
             return redirect(routes.ItemController.all());
 
         Items items = new Items();
@@ -42,7 +42,7 @@ public class CustomerController extends Controller {
         Items items = new Items();
         Categories categories = new Categories();
 
-        return ok(views.html.customers.items.render(items.getItemsByCustomerId(Long.parseLong(session().get("customer_id"))), categories));
+        return ok(views.html.customers.items.render(items.getItemsOpenByCustomerId(Long.parseLong(session().get("customer_id"))), items.getItemsAcceptedByCustomerId(Long.parseLong(session().get("customer_id"))), categories));
     }
 
     @Security.Authenticated(Secured.class)
@@ -66,7 +66,7 @@ public class CustomerController extends Controller {
             ChangePasswordForm changePassword = changePasswordForm.get();
             int customer_id = customers.authenticate(customer.getUsername(), changePassword.current_password);
 
-            if(customer_id > 0) {
+            if (customer_id > 0) {
                 int customerStatus = customers.changePassword(Long.parseLong(session().get("customer_id")), changePassword.new_password);
 
                 if (customerStatus > 0) {
@@ -94,10 +94,10 @@ public class CustomerController extends Controller {
         Customer customer = customers.getCustomerById(Long.parseLong(session().get("customer_id")));
 
         int customer_id = customers.authenticate(customer.getUsername(), password);
-        if(customer_id > 0) {
+        if (customer_id > 0) {
             int customerStatus = customers.deleteCustomer(Long.parseLong(session().get("customer_id")));
 
-            if(customerStatus > 0) {
+            if (customerStatus > 0) {
                 session().remove("customer_id");
 
                 flash("info", "Käyttäjätilisi on nyt poistettu.");
@@ -125,7 +125,7 @@ public class CustomerController extends Controller {
 
             int registerStatus = customers.createCustomer(customer.username, customer.email, customer.password);
 
-            if(registerStatus > 0) {
+            if (registerStatus > 0) {
                 flash("success", "Käyttäjätilisi on nyt luotu. Voit nyt kirjautua sisään alla olevalla lomakkeella.");
                 flash("username", customer.username);
 
@@ -140,7 +140,12 @@ public class CustomerController extends Controller {
     }
 
     public static Result counterOffers() {
-        return ok(views.html.customers.counteroffers.render(new Items().getItemsForCustomerCounterOffersByCustomerId(Long.parseLong(session().get("customer_id")))));
+        return ok(views.html.customers.counteroffers.render(new Items().
+                getItemsOpenForCustomerCounterOffersByCustomerId(Long.parseLong(session().get("customer_id"))),
+                new Items().
+                        getItemsAcceptedForCustomerCounterOffersByCustomerId(Long.parseLong(session().get("customer_id"))),
+                new Items().
+                        getItemsClosedForCustomerCounterOffersByCustomerId(Long.parseLong(session().get("customer_id")))));
     }
 
     public static Long getLockedItemsCount() {
@@ -148,6 +153,6 @@ public class CustomerController extends Controller {
     }
 
     public static Result offers() {
-        return ok(views.html.customers.offers.render(new Items().getItemsForCustomerOffersByCustomerId(Long.parseLong(session().get("customer_id")))));
+        return ok(views.html.customers.offers.render(new Items().getItemsOpenForCustomerOffersByCustomerId(Long.parseLong(session().get("customer_id"))), new Items().getItemsAcceptedForCustomerOffersByCustomerId(Long.parseLong(session().get("customer_id")))));
     }
 }

@@ -13,11 +13,11 @@
         </tr>
         </thead>
         <tbody>
-            @for(category <- categories) {
-                <tr>
-                    <td><a href="@routes.CategoryController.show(1)">@category.getTitle()</a></td>
-                </tr>
-            }
+        @for(category <- categories) {
+        <tr>
+            <td><a href="@routes.CategoryController.show(1)">@category.getTitle()</a></td>
+        </tr>
+        }
         </tbody>
     </table>
 </div>

@@ -20,16 +20,16 @@ public class CategoryController extends Controller {
     public static Result all() {
         List<Item> items = new Items().getOpenItems();
 
-        return ok(views.html.categories.show.render(items, categories));
+        return ok(views.html.categories.show.render(items, categories, null));
     }
 
     public static Result show(Long id) {
         List<Item> items = new Items().getOpenItemsByCategoryId(id);
 
-        if(items.size() == 0)
+        if (items.size() == 0)
             return redirect(routes.ItemController.all());
 
-        return ok(views.html.categories.show.render(items, categories));
+        return ok(views.html.categories.show.render(items, categories, categories.getCategoryById(id)));
     }
 
     @Security.Authenticated(Secured.class)
@@ -50,7 +50,7 @@ public class CategoryController extends Controller {
 
             int categoryStatus = categories.createCategory(category.title);
 
-            if(categoryStatus > 0) {
+            if (categoryStatus > 0) {
                 flash("success", "Kategoria lisätty!");
 
                 return redirect(routes.CategoryController.all());

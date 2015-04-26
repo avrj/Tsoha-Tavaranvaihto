@@ -34,11 +34,18 @@ public class CounterOffers {
                 counterOffers.add(new CounterOffer(result.getLong("customer_id"), item_id, result.getString("description")));
             }
 
-        } catch (Exception e) {  }
+        } catch (Exception e) {
+        }
 
-        try { statement.close(); } catch (SQLException e) {  }
+        try {
+            statement.close();
+        } catch (SQLException e) {
+        }
 
-        try { result.close(); } catch (SQLException e) {  }
+        try {
+            result.close();
+        } catch (SQLException e) {
+        }
 
         return counterOffers;
     }
@@ -59,11 +66,18 @@ public class CounterOffers {
                 return result.getLong("COUNT(*)");
             }
 
-        } catch (Exception e) {  }
+        } catch (Exception e) {
+        }
 
-        try { statement.close(); } catch (SQLException e) {  }
+        try {
+            statement.close();
+        } catch (SQLException e) {
+        }
 
-        try { result.close(); } catch (SQLException e) {  }
+        try {
+            result.close();
+        } catch (SQLException e) {
+        }
 
         return 0L;
     }
@@ -83,9 +97,15 @@ public class CounterOffers {
             statement.setString(3, description);
 
             result = statement.executeUpdate();
-        } catch (Exception e) { Logger.error(e.toString()); }
+        } catch (Exception e) {
+            Logger.error(e.toString());
+        }
 
-        try { statement.close(); } catch (SQLException e) { Logger.error(e.toString()); }
+        try {
+            statement.close();
+        } catch (SQLException e) {
+            Logger.error(e.toString());
+        }
 
         return result;
 
@@ -111,11 +131,21 @@ public class CounterOffers {
             }
 
 
-        } catch (Exception e) { Logger.error(e.toString()); }
+        } catch (Exception e) {
+            Logger.error(e.toString());
+        }
 
-        try { statement.close(); } catch (SQLException e) { Logger.error(e.toString());  }
+        try {
+            statement.close();
+        } catch (SQLException e) {
+            Logger.error(e.toString());
+        }
 
-        try { result.close(); } catch (SQLException e) { Logger.error(e.toString()); }
+        try {
+            result.close();
+        } catch (SQLException e) {
+            Logger.error(e.toString());
+        }
 
         return null;
     }
@@ -135,9 +165,15 @@ public class CounterOffers {
             statement.setLong(2, customer_id);
 
             result = statement.executeUpdate();
-        } catch (Exception e) { Logger.error(e.toString()); }
+        } catch (Exception e) {
+            Logger.error(e.toString());
+        }
 
-        try { statement.close(); } catch (SQLException e) { Logger.error(e.toString()); }
+        try {
+            statement.close();
+        } catch (SQLException e) {
+            Logger.error(e.toString());
+        }
 
         return result;
     }
@@ -160,11 +196,18 @@ public class CounterOffers {
                 counterOffers.add(new CounterOffer(customer_id, result.getLong("item_id"), result.getString("description")));
             }
 
-        } catch (Exception e) {  }
+        } catch (Exception e) {
+        }
 
-        try { statement.close(); } catch (SQLException e) {  }
+        try {
+            statement.close();
+        } catch (SQLException e) {
+        }
 
-        try { result.close(); } catch (SQLException e) {  }
+        try {
+            result.close();
+        } catch (SQLException e) {
+        }
 
         return counterOffers;
     }

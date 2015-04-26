@@ -6,6 +6,7 @@ import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Security;
+
 /**
  * Created by avrj on 22.3.2015.
  */
@@ -27,7 +28,7 @@ public class SessionController extends Controller {
             LoginForm login_data = loginForm.get();
 
             int customer_id = customers.authenticate(login_data.username, login_data.password);
-            if(customer_id > 0) {
+            if (customer_id > 0) {
                 session("customer_id", Integer.toString(customer_id));
 
                 flash("success", "Tervetuloa " + login_data.username);

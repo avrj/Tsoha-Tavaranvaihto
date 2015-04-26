@@ -33,11 +33,18 @@ public class Customers {
                 customers.add(new Customer(result.getString("username"), result.getString("email")));
             }
 
-        } catch (Exception e) {  }
+        } catch (Exception e) {
+        }
 
-        try { statement.close(); } catch (SQLException e) {  }
+        try {
+            statement.close();
+        } catch (SQLException e) {
+        }
 
-        try { result.close(); } catch (SQLException e) {  }
+        try {
+            result.close();
+        } catch (SQLException e) {
+        }
 
         return customers;
     }
@@ -59,11 +66,18 @@ public class Customers {
                 return new Customer(result.getString("username"), result.getString("email"));
             }
 
-        } catch (Exception e) {  }
+        } catch (Exception e) {
+        }
 
-        try { statement.close(); } catch (SQLException e) {  }
+        try {
+            statement.close();
+        } catch (SQLException e) {
+        }
 
-        try { result.close(); } catch (SQLException e) {  }
+        try {
+            result.close();
+        } catch (SQLException e) {
+        }
 
         return null;
     }
@@ -85,11 +99,18 @@ public class Customers {
                 return result.getLong("COUNT(id)");
             }
 
-        } catch (Exception e) {  }
+        } catch (Exception e) {
+        }
 
-        try { statement.close(); } catch (SQLException e) {  }
+        try {
+            statement.close();
+        } catch (SQLException e) {
+        }
 
-        try { result.close(); } catch (SQLException e) {  }
+        try {
+            result.close();
+        } catch (SQLException e) {
+        }
 
         return 0L;
     }
@@ -112,9 +133,14 @@ public class Customers {
             statement.setString(3, BCrypt.hashpw(password, BCrypt.gensalt()));
 
             result = statement.executeUpdate();
-        } catch (Exception e) { e.printStackTrace(); }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        try { statement.close(); } catch (SQLException e) {  }
+        try {
+            statement.close();
+        } catch (SQLException e) {
+        }
 
         return result;
 
@@ -133,9 +159,15 @@ public class Customers {
             statement.setLong(1, id);
 
             result = statement.executeUpdate();
-        } catch (Exception e) { Logger.error(e.toString()); }
+        } catch (Exception e) {
+            Logger.error(e.toString());
+        }
 
-        try { statement.close(); } catch (SQLException e) { Logger.error(e.toString()); }
+        try {
+            statement.close();
+        } catch (SQLException e) {
+            Logger.error(e.toString());
+        }
 
         return result;
     }
@@ -156,7 +188,7 @@ public class Customers {
             result = statement.executeQuery();
 
             if (result.next()) {
-                if(result.getString("username").equals(username) && BCrypt.checkpw(password, result.getString("password"))) {
+                if (result.getString("username").equals(username) && BCrypt.checkpw(password, result.getString("password"))) {
                     return result.getInt("id");
                 }
             }
@@ -191,9 +223,15 @@ public class Customers {
             statement.setLong(2, id);
 
             result = statement.executeUpdate();
-        } catch (Exception e) { Logger.error(e.toString()); }
+        } catch (Exception e) {
+            Logger.error(e.toString());
+        }
 
-        try { statement.close(); } catch (SQLException e) { Logger.error(e.toString()); }
+        try {
+            statement.close();
+        } catch (SQLException e) {
+            Logger.error(e.toString());
+        }
 
         return result;
     }

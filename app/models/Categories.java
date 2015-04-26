@@ -33,11 +33,18 @@ public class Categories {
                 categories.add(new Category(result.getLong("id"), result.getString("title")));
             }
 
-        } catch (Exception e) {  }
+        } catch (Exception e) {
+        }
 
-        try { statement.close(); } catch (SQLException e) {  }
+        try {
+            statement.close();
+        } catch (SQLException e) {
+        }
 
-        try { result.close(); } catch (SQLException e) {  }
+        try {
+            result.close();
+        } catch (SQLException e) {
+        }
 
         return categories;
     }
@@ -58,11 +65,18 @@ public class Categories {
                 return result.getLong(1);
             }
 
-        } catch (Exception e) {  }
+        } catch (Exception e) {
+        }
 
-        try { statement.close(); } catch (SQLException e) {  }
+        try {
+            statement.close();
+        } catch (SQLException e) {
+        }
 
-        try { result.close(); } catch (SQLException e) {  }
+        try {
+            result.close();
+        } catch (SQLException e) {
+        }
 
         return 0L;
     }
@@ -83,11 +97,18 @@ public class Categories {
                 return new Category(result.getLong("id"), result.getString("title"));
             }
 
-        } catch (Exception e) {  }
+        } catch (Exception e) {
+        }
 
-        try { statement.close(); } catch (SQLException e) {  }
+        try {
+            statement.close();
+        } catch (SQLException e) {
+        }
 
-        try { result.close(); } catch (SQLException e) {  }
+        try {
+            result.close();
+        } catch (SQLException e) {
+        }
 
         return null;
     }
@@ -99,7 +120,7 @@ public class Categories {
         /*
             TODO: i -> id kannasta
          */
-        for(Category category : getCategories()) {
+        for (Category category : getCategories()) {
             category_items.add(play.libs.Scala.Tuple(Integer.toString(i), category.getTitle()));
             i++;
         }
@@ -123,9 +144,15 @@ public class Categories {
             statement.setString(1, title);
 
             result = statement.executeUpdate();
-        } catch (Exception e) { Logger.error(e.toString()); }
+        } catch (Exception e) {
+            Logger.error(e.toString());
+        }
 
-        try { statement.close(); } catch (SQLException e) { Logger.error(e.toString()); }
+        try {
+            statement.close();
+        } catch (SQLException e) {
+            Logger.error(e.toString());
+        }
 
         return result;
 
