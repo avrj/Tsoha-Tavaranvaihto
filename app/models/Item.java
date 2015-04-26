@@ -60,11 +60,11 @@ public class Item {
     }
 
     public Long getCounterOffersCount() {
-        return new CounterOffers().getCounterOffersCountForItem(item_id);
+        return CounterOffer.getCounterOffersCountForItem(item_id);
     }
 
     public CounterOffer getCounterOfferByCustomerId(Long customer_id) {
-        return new CounterOffers().getCounterOfferForItemByCustomerId(item_id, customer_id);
+        return CounterOffer.getCounterOfferForItemByCustomerId(item_id, customer_id);
     }
 
     public java.sql.Timestamp getLockedAtTimestamp() {

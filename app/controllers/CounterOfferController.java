@@ -33,16 +33,16 @@ public class CounterOfferController extends Controller {
             return redirect(routes.ItemController.show(id));
         }
 
-        int counterOfferStatus = new CounterOffers().createCounterOffer(Long.parseLong(session().get("customer_id")), id, requestData.get("counteroffer_description"));
+        CounterOffer counterOffer = new CounterOffer(Long.parseLong(session().get("customer_id")), id, requestData.get("counteroffer_description"));
 
-        if (counterOfferStatus > 0) {
+        if (counterOffer.save()) {
             flash("success", "Vastatarjous lisätty onnistuneesti.");
             return redirect(routes.ItemController.show(id));
         } else {
             Customer customer = new Customers().getCustomerById(item.getCustomerId());
             Category category = Category.getCategoryById(item.getCategoryId());
-            CounterOffer currentCustomerCounterOffer = new CounterOffers().getCounterOfferForItemByCustomerId(id, Long.parseLong(session().get("customer_id")));
-            List<CounterOffer> counterOffers = new CounterOffers().getCounterOffersForItem(id);
+            CounterOffer currentCustomerCounterOffer = CounterOffer.getCounterOfferForItemByCustomerId(id, Long.parseLong(session().get("customer_id")));
+            List<CounterOffer> counterOffers = CounterOffer.getCounterOffersForItem(id);
 
             return ok(views.html.items.show.render(id, item, customer, category, currentCustomerCounterOffer, counterOffers));
         }
@@ -60,16 +60,14 @@ public class CounterOfferController extends Controller {
             return redirect(routes.ItemController.show(id));
         }
 
-        int counterOfferStatus = new CounterOffers().deleteCounterOffer(id, Long.parseLong(session().get("customer_id")));
-
-        if (counterOfferStatus > 0) {
+        if (CounterOffer.deleteCounterOffer(id, Long.parseLong(session().get("customer_id")))) {
             flash("success", "Vastatarjous poistettu onnistuneesti.");
             return redirect(routes.ItemController.show(id));
         } else {
             Customer customer = new Customers().getCustomerById(item.getCustomerId());
             Category category = Category.getCategoryById(item.getCategoryId());
-            CounterOffer currentCustomerCounterOffer = new CounterOffers().getCounterOfferForItemByCustomerId(id, Long.parseLong(session().get("customer_id")));
-            List<CounterOffer> counterOffers = new CounterOffers().getCounterOffersForItem(id);
+            CounterOffer currentCustomerCounterOffer = CounterOffer.getCounterOfferForItemByCustomerId(id, Long.parseLong(session().get("customer_id")));
+            List<CounterOffer> counterOffers = CounterOffer.getCounterOffersForItem(id);
 
             return ok(views.html.items.show.render(id, item, customer, category, currentCustomerCounterOffer, counterOffers));
         }

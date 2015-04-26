@@ -22,10 +22,6 @@ public class Category {
     public String title;
     private Long id;
 
-    public Category() {
-
-    }
-
     public Category(Long id, String title) {
         this.title = title;
         this.id = id;

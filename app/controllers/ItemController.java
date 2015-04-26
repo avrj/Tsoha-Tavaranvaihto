@@ -32,8 +32,8 @@ public class ItemController extends Controller {
         Customer customer = new Customers().getCustomerById(item.getCustomerId());
         Category category = Category.getCategoryById(item.getCategoryId());
 
-        CounterOffer currentCustomerCounterOffer = new CounterOffers().getCounterOfferForItemByCustomerId(id, Long.parseLong(session().get("customer_id")));
-        List<CounterOffer> counterOffers = new CounterOffers().getCounterOffersForItem(id);
+        CounterOffer currentCustomerCounterOffer = CounterOffer.getCounterOfferForItemByCustomerId(id, Long.parseLong(session().get("customer_id")));
+        List<CounterOffer> counterOffers = CounterOffer.getCounterOffersForItem(id);
         return ok(views.html.items.show.render(id, item, customer, category, currentCustomerCounterOffer, counterOffers));
     }
 
@@ -119,8 +119,8 @@ public class ItemController extends Controller {
 
             Customer customer = new Customers().getCustomerById(item.getCustomerId());
             Category category = Category.getCategoryById(item.getCategoryId());
-            CounterOffer currentCustomerCounterOffer = new CounterOffers().getCounterOfferForItemByCustomerId(id, Long.parseLong(session().get("customer_id")));
-            List<CounterOffer> counterOffers = new CounterOffers().getCounterOffersForItem(id);
+            CounterOffer currentCustomerCounterOffer = CounterOffer.getCounterOfferForItemByCustomerId(id, Long.parseLong(session().get("customer_id")));
+            List<CounterOffer> counterOffers = CounterOffer.getCounterOffersForItem(id);
             return ok(views.html.items.show.render(id, item, customer, category, currentCustomerCounterOffer, counterOffers));
         }
     }
@@ -179,8 +179,8 @@ public class ItemController extends Controller {
 
             Customer customer = new Customers().getCustomerById(item.getCustomerId());
             Category category = Category.getCategoryById(item.getCategoryId());
-            CounterOffer currentCustomerCounterOffer = new CounterOffers().getCounterOfferForItemByCustomerId(id, Long.parseLong(session().get("customer_id")));
-            List<CounterOffer> counterOffers = new CounterOffers().getCounterOffersForItem(id);
+            CounterOffer currentCustomerCounterOffer = CounterOffer.getCounterOfferForItemByCustomerId(id, Long.parseLong(session().get("customer_id")));
+            List<CounterOffer> counterOffers = CounterOffer.getCounterOffersForItem(id);
             return ok(views.html.items.show.render(id, item, customer, category, currentCustomerCounterOffer, counterOffers));
         }
     }
@@ -204,8 +204,8 @@ public class ItemController extends Controller {
 
             Customer customer = new Customers().getCustomerById(item.getCustomerId());
             Category category = Category.getCategoryById(item.getCategoryId());
-            CounterOffer currentCustomerCounterOffer = new CounterOffers().getCounterOfferForItemByCustomerId(id, Long.parseLong(session().get("customer_id")));
-            List<CounterOffer> counterOffers = new CounterOffers().getCounterOffersForItem(id);
+            CounterOffer currentCustomerCounterOffer = CounterOffer.getCounterOfferForItemByCustomerId(id, Long.parseLong(session().get("customer_id")));
+            List<CounterOffer> counterOffers = CounterOffer.getCounterOffersForItem(id);
             return ok(views.html.items.show.render(id, item, customer, category, currentCustomerCounterOffer, counterOffers));
         }
     }
@@ -226,8 +226,8 @@ public class ItemController extends Controller {
 
             Customer customer = new Customers().getCustomerById(item.getCustomerId());
             Category category = Category.getCategoryById(item.getCategoryId());
-            CounterOffer currentCustomerCounterOffer = new CounterOffers().getCounterOfferForItemByCustomerId(id, Long.parseLong(session().get("customer_id")));
-            List<CounterOffer> counterOffers = new CounterOffers().getCounterOffersForItem(id);
+            CounterOffer currentCustomerCounterOffer = CounterOffer.getCounterOfferForItemByCustomerId(id, Long.parseLong(session().get("customer_id")));
+            List<CounterOffer> counterOffers = CounterOffer.getCounterOffersForItem(id);
             return ok(views.html.items.show.render(id, item, customer, category, currentCustomerCounterOffer, counterOffers));
         }
     }
