@@ -30,7 +30,7 @@ public class CounterOffer {
     }
 
     public Customer getCustomer() {
-        return new Customers().getCustomerById(customer_id);
+        return Customer.getCustomerById(customer_id);
     }
 
     public Long getItemId() {

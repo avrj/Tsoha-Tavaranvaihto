@@ -39,7 +39,7 @@ public class CounterOfferController extends Controller {
             flash("success", "Vastatarjous lisätty onnistuneesti.");
             return redirect(routes.ItemController.show(id));
         } else {
-            Customer customer = new Customers().getCustomerById(item.getCustomerId());
+            Customer customer = Customer.getCustomerById(item.getCustomerId());
             Category category = Category.getCategoryById(item.getCategoryId());
             CounterOffer currentCustomerCounterOffer = CounterOffer.getCounterOfferForItemByCustomerId(id, Long.parseLong(session().get("customer_id")));
             List<CounterOffer> counterOffers = CounterOffer.getCounterOffersForItem(id);
@@ -64,7 +64,7 @@ public class CounterOfferController extends Controller {
             flash("success", "Vastatarjous poistettu onnistuneesti.");
             return redirect(routes.ItemController.show(id));
         } else {
-            Customer customer = new Customers().getCustomerById(item.getCustomerId());
+            Customer customer = Customer.getCustomerById(item.getCustomerId());
             Category category = Category.getCategoryById(item.getCategoryId());
             CounterOffer currentCustomerCounterOffer = CounterOffer.getCounterOfferForItemByCustomerId(id, Long.parseLong(session().get("customer_id")));
             List<CounterOffer> counterOffers = CounterOffer.getCounterOffersForItem(id);

@@ -56,7 +56,7 @@ public class Item {
     }
 
     public Customer getOwner() {
-        return new Customers().getCustomerById(customer_id);
+        return Customer.getCustomerById(customer_id);
     }
 
     public Long getCounterOffersCount() {
@@ -85,7 +85,7 @@ public class Item {
     }
 
     public Customer getLockedCustomer() {
-        return new Customers().getCustomerById(locked_customer_id);
+        return Customer.getCustomerById(locked_customer_id);
     }
 
     public java.sql.Timestamp getAcceptedOfferAtTimestamp() {
@@ -101,6 +101,6 @@ public class Item {
     }
 
     public Customer getAcceptedOfferCustomer() {
-        return new Customers().getCustomerById(accepted_customer_id);
+        return Customer.getCustomerById(accepted_customer_id);
     }
 }

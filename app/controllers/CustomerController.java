@@ -12,8 +12,6 @@ import play.mvc.Security;
  * Created by avrj on 22.3.2015.
  */
 public class CustomerController extends Controller {
-    private static Customers customers = new Customers();
-
     public static Result new_customer() {
         Form<RegisterForm> customerForm = Form.form(RegisterForm.class);
 
@@ -23,11 +21,11 @@ public class CustomerController extends Controller {
 
     @Security.Authenticated(Secured.class)
     public static Result all() {
-        return ok(Integer.toString(customers.getCustomers().size()));
+        return ok(Integer.toString(Customer.getCustomers().size()));
     }
 
     public static Result show(Long id) {
-        Customer customer = customers.getCustomerById(id);
+        Customer customer = Customer.getCustomerById(id);
 
         if (customer == null)
             return redirect(routes.ItemController.all());
@@ -45,7 +43,7 @@ public class CustomerController extends Controller {
 
     @Security.Authenticated(Secured.class)
     public static Result edit() {
-        Customer customer = customers.getCustomerById(Long.parseLong(session().get("customer_id")));
+        Customer customer = Customer.getCustomerById(Long.parseLong(session().get("customer_id")));
 
         Form<ChangePasswordForm> changePasswordForm = Form.form(ChangePasswordForm.class);
 
@@ -56,18 +54,16 @@ public class CustomerController extends Controller {
     public static Result update() {
         Form<ChangePasswordForm> changePasswordForm = Form.form(ChangePasswordForm.class).bindFromRequest();
 
-        Customer customer = customers.getCustomerById(Long.parseLong(session().get("customer_id")));
+        Customer customer = Customer.getCustomerById(Long.parseLong(session().get("customer_id")));
 
         if (changePasswordForm.hasErrors()) {
             return badRequest(views.html.customers.edit.render(customer, changePasswordForm));
         } else {
             ChangePasswordForm changePassword = changePasswordForm.get();
-            int customer_id = customers.authenticate(customer.getUsername(), changePassword.current_password);
+            int customer_id = Customer.authenticate(customer.getUsername(), changePassword.current_password);
 
             if (customer_id > 0) {
-                int customerStatus = customers.changePassword(Long.parseLong(session().get("customer_id")), changePassword.new_password);
-
-                if (customerStatus > 0) {
+                if (Customer.changePassword(Long.parseLong(session().get("customer_id")), changePassword.new_password)) {
                     flash("success", "Salasana on nyt vaihdettu.");
 
                     return redirect(routes.CustomerController.edit());
@@ -89,13 +85,11 @@ public class CustomerController extends Controller {
         DynamicForm requestData = Form.form().bindFromRequest();
         String password = requestData.get("password");
 
-        Customer customer = customers.getCustomerById(Long.parseLong(session().get("customer_id")));
+        Customer customer = Customer.getCustomerById(Long.parseLong(session().get("customer_id")));
 
-        int customer_id = customers.authenticate(customer.getUsername(), password);
+        int customer_id = Customer.authenticate(customer.getUsername(), password);
         if (customer_id > 0) {
-            int customerStatus = customers.deleteCustomer(Long.parseLong(session().get("customer_id")));
-
-            if (customerStatus > 0) {
+            if (Customer.deleteCustomer(Long.parseLong(session().get("customer_id")))) {
                 session().remove("customer_id");
 
                 flash("info", "Käyttäjätilisi on nyt poistettu.");
@@ -121,9 +115,8 @@ public class CustomerController extends Controller {
         } else {
             RegisterForm customer = customerForm.get();
 
-            int registerStatus = customers.createCustomer(customer.username, customer.email, customer.password);
-
-            if (registerStatus > 0) {
+            Customer new_customer = new Customer(customer.username, customer.email, customer.password);
+            if (new_customer.save()) {
                 flash("success", "Käyttäjätilisi on nyt luotu. Voit nyt kirjautua sisään alla olevalla lomakkeella.");
                 flash("username", customer.username);
 
@@ -147,7 +140,7 @@ public class CustomerController extends Controller {
     }
 
     public static Long getLockedItemsCount() {
-        return customers.getLockedItemsCountByCustomerId(Long.parseLong(session().get("customer_id")));
+        return Customer.getLockedItemsCountByCustomerId(Long.parseLong(session().get("customer_id")));
     }
 
     public static Result offers() {

@@ -1,7 +1,6 @@
 package controllers;
 
 import models.Customer;
-import models.Customers;
 import models.Items;
 import play.data.validation.Constraints;
 import play.db.DB;
@@ -20,7 +19,7 @@ public class ApplicationController extends Controller {
         if (session().get("customer_id").isEmpty())
             return null;
 
-        Customer customer = new Customers().getCustomerById(Long.parseLong(session().get("customer_id")));
+        Customer customer = Customer.getCustomerById(Long.parseLong(session().get("customer_id")));
 
         if (customer == null)
             return null;

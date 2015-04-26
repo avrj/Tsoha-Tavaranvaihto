@@ -1,6 +1,6 @@
 package controllers;
 
-import models.Customers;
+import models.Customer;
 import models.LoginForm;
 import play.data.Form;
 import play.mvc.Controller;
@@ -11,8 +11,6 @@ import play.mvc.Security;
  * Created by avrj on 22.3.2015.
  */
 public class SessionController extends Controller {
-    private static Customers customers = new Customers();
-
     public static Result index() {
         Form<LoginForm> loginForm = Form.form(LoginForm.class);
 
@@ -27,7 +25,7 @@ public class SessionController extends Controller {
         } else {
             LoginForm login_data = loginForm.get();
 
-            int customer_id = customers.authenticate(login_data.username, login_data.password);
+            int customer_id = Customer.authenticate(login_data.username, login_data.password);
             if (customer_id > 0) {
                 session("customer_id", Integer.toString(customer_id));
 

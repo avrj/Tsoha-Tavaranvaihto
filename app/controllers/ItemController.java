@@ -29,7 +29,7 @@ public class ItemController extends Controller {
             return redirect(routes.ItemController.all());
 
         Logger.error(Long.toString(item.getCustomerId()));
-        Customer customer = new Customers().getCustomerById(item.getCustomerId());
+        Customer customer = Customer.getCustomerById(item.getCustomerId());
         Category category = Category.getCategoryById(item.getCategoryId());
 
         CounterOffer currentCustomerCounterOffer = CounterOffer.getCounterOfferForItemByCustomerId(id, Long.parseLong(session().get("customer_id")));
@@ -117,7 +117,7 @@ public class ItemController extends Controller {
         } else {
             flash("error", "Ilmoituksen poistaminen epäonnistui.");
 
-            Customer customer = new Customers().getCustomerById(item.getCustomerId());
+            Customer customer = Customer.getCustomerById(item.getCustomerId());
             Category category = Category.getCategoryById(item.getCategoryId());
             CounterOffer currentCustomerCounterOffer = CounterOffer.getCounterOfferForItemByCustomerId(id, Long.parseLong(session().get("customer_id")));
             List<CounterOffer> counterOffers = CounterOffer.getCounterOffersForItem(id);
@@ -177,7 +177,7 @@ public class ItemController extends Controller {
         } else {
             flash("error", "Ilmoituksen lukitseminen epäonnistui.");
 
-            Customer customer = new Customers().getCustomerById(item.getCustomerId());
+            Customer customer = Customer.getCustomerById(item.getCustomerId());
             Category category = Category.getCategoryById(item.getCategoryId());
             CounterOffer currentCustomerCounterOffer = CounterOffer.getCounterOfferForItemByCustomerId(id, Long.parseLong(session().get("customer_id")));
             List<CounterOffer> counterOffers = CounterOffer.getCounterOffersForItem(id);
@@ -202,7 +202,7 @@ public class ItemController extends Controller {
         } else {
             flash("error", "Ilmoituksen lukituksen poistaminen epäonnistui.");
 
-            Customer customer = new Customers().getCustomerById(item.getCustomerId());
+            Customer customer = Customer.getCustomerById(item.getCustomerId());
             Category category = Category.getCategoryById(item.getCategoryId());
             CounterOffer currentCustomerCounterOffer = CounterOffer.getCounterOfferForItemByCustomerId(id, Long.parseLong(session().get("customer_id")));
             List<CounterOffer> counterOffers = CounterOffer.getCounterOffersForItem(id);
@@ -224,7 +224,7 @@ public class ItemController extends Controller {
         } else {
             flash("error", "Tarjouksen hyväksyminen epäonnistui.");
 
-            Customer customer = new Customers().getCustomerById(item.getCustomerId());
+            Customer customer = Customer.getCustomerById(item.getCustomerId());
             Category category = Category.getCategoryById(item.getCategoryId());
             CounterOffer currentCustomerCounterOffer = CounterOffer.getCounterOfferForItemByCustomerId(id, Long.parseLong(session().get("customer_id")));
             List<CounterOffer> counterOffers = CounterOffer.getCounterOffersForItem(id);
