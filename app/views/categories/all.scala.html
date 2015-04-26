@@ -1,24 +1,24 @@
 @(categories: List[Category])
 
-@layouts.main_template("Tavaranvaihto") {
-<div>
-    <h2>Kategoriat</h2>
+@layouts.template("Tavaranvaihto") {
+    <div>
+        <h2>Kategoriat</h2>
 
-    <p>Yhteensä @categories.size() kategoriaa</p>
+        <p>Yhteensä @categories.size() kategoriaa</p>
 
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th>Nimi</th>
-        </tr>
-        </thead>
-        <tbody>
-        @for(category <- categories) {
-        <tr>
-            <td><a href="@routes.CategoryController.show(1)">@category.getTitle()</a></td>
-        </tr>
-        }
-        </tbody>
-    </table>
-</div>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Nimi</th>
+            </tr>
+            </thead>
+            <tbody>
+            @for(category <- categories) {
+            <tr>
+                <td><a href="@routes.CategoryController.show(1)">@category.getTitle()</a></td>
+            </tr>
+            }
+            </tbody>
+        </table>
+    </div>
 }

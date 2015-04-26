@@ -1,12 +1,8 @@
 package controllers;
 
-import models.Customer;
+import models.customer.Customer;
 import models.Item;
-import play.data.validation.Constraints;
-import play.db.DB;
 import play.mvc.*;
-
-import java.sql.*;
 
 public class ApplicationController extends Controller {
     public static Result index() {

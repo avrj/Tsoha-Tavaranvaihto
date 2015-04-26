@@ -1,55 +1,55 @@
 @(items: List[Item], current_category: Category)
 
-@layouts.main_template("Tavaranvaihto") {
-<div>
-    <p><strong>Kategoria</strong></p>
+@layouts.template("Tavaranvaihto") {
+    <div>
+        <p><strong>Kategoria</strong></p>
 
-    <p>
-        @for(category <- Category.getCategories()) {
-        @if(Category.getItemsCount(category.getId()) > 0) {
-            @if(current_category.getId() == category.getId()) {
-        <button class="btn btn-primary" disabled="disabled">@category.getTitle() <span
-                class="badge">@Category.getItemsCount(category.getId())</span></button>
+        <p>
+            @for(category <- Category.getCategories()) {
+            @if(Category.getItemsCount(category.getId()) > 0) {
+                @if(current_category.getId() == category.getId()) {
+            <button class="btn btn-primary" disabled="disabled">@category.getTitle() <span
+                    class="badge">@Category.getItemsCount(category.getId())</span></button>
+            } else {
+            <a href="@routes.CategoryController.show(category.getId())" class="btn btn-success">@category.getTitle() <span
+                    class="badge">@Category.getItemsCount(category.getId())</span></a>
+            }
+            }
+            }
+        </p>
+    </div>
+    <div>
+        @if(current_category == null) {
+            <h1>Ilmoitukset</h1>
         } else {
-        <a href="@routes.CategoryController.show(category.getId())" class="btn btn-success">@category.getTitle() <span
-                class="badge">@Category.getItemsCount(category.getId())</span></a>
+            <h2>Ilmoitukset kategoriassa @current_category.getTitle()</h2>
         }
-        }
-        }
-    </p>
-</div>
-<div>
-    @if(current_category == null) {
-        <h1>Ilmoitukset</h1>
-    } else {
-        <h2>Ilmoitukset kategoriassa @current_category.getTitle()</h2>
-    }
 
-    @if(items.size() == 1) {
-    <p>Yhteensä 1 ilmoitus</p>
-    } else {
-    <p>Yhteensä @items.size() ilmoitusta</p>
-    }
-
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th>Tavara</th>
-            <th>Vastatarjoukset</th>
-            <th>Ilmoittaja</th>
-            <th>Ilmoitus jätetty</th>
-        </tr>
-        </thead>
-        <tbody>
-        @for(item <- items) {
-        <tr>
-            <td><a href="@routes.ItemController.show(item.getId())">@item.getTitle()</a></td>
-            <td>@item.getCounterOffersCount()</td>
-            <td><a href="@routes.CustomerController.show(item.getCustomerId())">@item.getOwner().getUsername()</a></td>
-            <td>@item.getTimestamp()</td>
-        </tr>
+        @if(items.size() == 1) {
+        <p>Yhteensä 1 ilmoitus</p>
+        } else {
+        <p>Yhteensä @items.size() ilmoitusta</p>
         }
-        </tbody>
-    </table>
-</div>
+
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Tavara</th>
+                <th>Vastatarjoukset</th>
+                <th>Ilmoittaja</th>
+                <th>Ilmoitus jätetty</th>
+            </tr>
+            </thead>
+            <tbody>
+            @for(item <- items) {
+            <tr>
+                <td><a href="@routes.ItemController.show(item.getId())">@item.getTitle()</a></td>
+                <td>@item.getCounterOffersCount()</td>
+                <td><a href="@routes.CustomerController.show(item.getCustomerId())">@item.getOwner().getUsername()</a></td>
+                <td>@item.getTimestamp()</td>
+            </tr>
+            }
+            </tbody>
+        </table>
+    </div>
 }

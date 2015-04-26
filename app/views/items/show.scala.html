@@ -1,6 +1,8 @@
+@import models.customer.Customer
+
 @(id: Long, item: Item, customer: Customer, category: Category, currentCustomerCounterOffer: CounterOffer, counterOffers: List[CounterOffer])
 
-@layouts.main_template("Tavaranvaihto") {
+@layouts.template("Tavaranvaihto") {
 @if(item.getCustomerId() == Integer.parseInt(session().get("customer_id")) && item.getLockedAtTimestamp() != null) {
 <div class="alert alert-info" role="alert">
     @if(item.getAcceptedOfferAt == null) {

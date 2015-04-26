@@ -1,5 +1,6 @@
 package models;
 
+import models.customer.Customer;
 import play.Logger;
 import play.data.validation.Constraints;
 import play.db.DB;
@@ -34,7 +35,7 @@ public class Item {
     private java.sql.Timestamp timestamp, locked_at_timestamp, accepted_offer_at;
 
     public Item() {
-        
+
     }
 
     public Item (String title, String description, String vaihdossa, Long category_id) {

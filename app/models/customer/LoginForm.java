@@ -1,4 +1,4 @@
-package models;
+package models.customer;
 
 import play.data.validation.Constraints;
 
@@ -13,14 +13,4 @@ public class LoginForm {
     @Constraints.Required
     @Constraints.MinLength(value = 8)
     public String password;
-
-    /*
-
-    public String validate() {
-    if (User.authenticate(email, password) == null) {
-      return "Invalid user or password";
-    }
-    return null;
-}
-     */
 }

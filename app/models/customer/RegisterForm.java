@@ -1,4 +1,4 @@
-package models;
+package models.customer;
 
 import play.data.validation.Constraints;
 import play.data.validation.ValidationError;

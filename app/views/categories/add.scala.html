@@ -1,26 +1,25 @@
 @(newCategoryForm: Form[Category])
 
-@layouts.main_template("Tavaranvaihto") {
-
-@if(newCategoryForm.hasGlobalErrors) {
-<div class="alert alert-danger">
-    @newCategoryForm.globalError.message
-</div>
-}
-
-<div class="login-panel panel panel-default">
-    <div class="panel-heading">
-        <h3 class="panel-title">Luo kategoria</h3>
-    </div>
-    <div class="panel-body">
-        @helper.form(action = routes.CategoryController.create(), 'role -> "form") {
-        <div class="form-group">
-            @helper.inputText(newCategoryForm("title"), 'class -> "form-control", 'autofocus -> "", '_showConstraints ->
-            false, '_label -> "Otsikko")
+@layouts.template("Tavaranvaihto") {
+    @if(newCategoryForm.hasGlobalErrors) {
+        <div class="alert alert-danger">
+            @newCategoryForm.globalError.message
         </div>
+    }
 
-        <button class="btn btn-sm btn-success">Luo kategoria</button>
-        }
+    <div class="login-panel panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Luo kategoria</h3>
+        </div>
+        <div class="panel-body">
+            @helper.form(action = routes.CategoryController.create(), 'role -> "form") {
+                <div class="form-group">
+                    @helper.inputText(newCategoryForm("title"), 'class -> "form-control", 'autofocus -> "", '_showConstraints ->
+                    false, '_label -> "Otsikko")
+                </div>
+
+                <button class="btn btn-sm btn-success">Luo kategoria</button>
+            }
+        </div>
     </div>
-</div>
 }

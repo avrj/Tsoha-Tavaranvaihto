@@ -1,4 +1,4 @@
-package models;
+package models.customer;
 
 import org.mindrot.jbcrypt.BCrypt;
 import play.Logger;

@@ -1,7 +1,9 @@
 package controllers;
 
 import models.*;
-import org.mindrot.jbcrypt.BCrypt;
+import models.customer.ChangePasswordForm;
+import models.customer.Customer;
+import models.customer.RegisterForm;
 import play.data.DynamicForm;
 import play.data.Form;
 import play.mvc.Controller;

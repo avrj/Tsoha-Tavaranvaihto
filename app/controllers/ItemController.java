@@ -1,8 +1,8 @@
 package controllers;
 
 import models.*;
+import models.customer.Customer;
 import play.Logger;
-import play.data.DynamicForm;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;

@@ -1,7 +1,7 @@
 package controllers;
 
-import models.Customer;
-import models.LoginForm;
+import models.customer.Customer;
+import models.customer.LoginForm;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;

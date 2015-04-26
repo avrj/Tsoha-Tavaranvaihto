@@ -1,5 +1,6 @@
 package models;
 
+import models.customer.Customer;
 import play.Logger;
 import play.db.DB;
 

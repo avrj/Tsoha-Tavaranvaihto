@@ -1,41 +1,23 @@
 @(categories: Seq[(String, String)], newItemForm: Form[Item])
 
-@layouts.main_template("Tavaranvaihto") {
+@layouts.template("Tavaranvaihto") {
 
-@if(newItemForm.hasGlobalErrors) {
-<div class="alert alert-danger">
-    @newItemForm.globalError.message
-</div>
-}
+    @if(newItemForm.hasGlobalErrors) {
+        <div class="alert alert-danger">
+            @newItemForm.globalError.message
+        </div>
+    }
 
-<div class="login-panel panel panel-default">
-    <div class="panel-heading">
-        <h3 class="panel-title">Luo ilmoitus</h3>
+    <div class="login-panel panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Luo ilmoitus</h3>
+        </div>
+        <div class="panel-body">
+            @helper.form(action = routes.ItemController.create(), 'role -> "form") {
+                @items.form(newItemForm, categories)
+
+                <button class="btn btn-sm btn-success">Luo ilmoitus</button>
+            }
+        </div>
     </div>
-    <div class="panel-body">
-        @helper.form(action = routes.ItemController.create(), 'role -> "form") {
-        <div class="form-group">
-            @helper.inputText(newItemForm("title"), 'class -> "form-control", 'autofocus -> "", '_showConstraints ->
-            false, '_label -> "Otsikko")
-        </div>
-
-        <div class="form-group">
-            @helper.textarea(newItemForm("description"), 'class -> "form-control", '_showConstraints ->
-            false, '_label -> "Kuvaus")
-        </div>
-
-        <div class="form-group">
-            @helper.select(newItemForm("category_id"), categories, 'class -> "form-control", '_showConstraints ->
-            false, '_label -> "Kategoria")
-        </div>
-
-        <div class="form-group">
-            @helper.inputText(newItemForm("vaihdossa"), 'class -> "form-control", '_showConstraints ->
-            false, '_label -> "Vaihdossa (jätä tyhjäksi jos et halua määritellä mitä haluaisit vaihdossa)")
-        </div>
-
-        <button class="btn btn-sm btn-success">Luo ilmoitus</button>
-        }
-    </div>
-</div>
 }

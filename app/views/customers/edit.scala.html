@@ -1,46 +1,50 @@
+@import models.customer.ChangePasswordForm
+
+@import models.customer.Customer
+
 @(customer: Customer, changePasswordForm: Form[ChangePasswordForm])
 
-@layouts.main_template("Tavaranvaihto") {
-<h2>Käyttäjätilin asetukset</h2>
+@layouts.template("Tavaranvaihto") {
+    <h2>Käyttäjätilin asetukset</h2>
 
-<p>@customer.getUsername() (@customer.getEmail())</p>
+    <p>@customer.getUsername() (@customer.getEmail())</p>
 
-<div>
-    <h3>Vaihda salasana</h3>
+    <div>
+        <h3>Vaihda salasana</h3>
 
-    @helper.form(action = routes.CustomerController.update(), 'role -> "form") {
-    <div class="form-group">
-        @helper.inputPassword(changePasswordForm("current_password"), 'class -> "form-control", 'autofocus -> "",
-        '_showConstraints ->
-        false, '_label -> "Nykyinen salasana")
-    </div>
-    <div class="form-group">
-        @helper.inputPassword(changePasswordForm("new_password"), 'class -> "form-control", 'autofocus -> "",
-        '_showConstraints ->
-        false, '_label -> "Uusi salasana")
-    </div>
-    <div class="form-group">
-        @helper.inputPassword(changePasswordForm("new_password_again"), 'class -> "form-control", 'autofocus -> "",
-        '_showConstraints ->
-        false, '_label -> "Uusi salasana uudelleen")
-    </div>
+        @helper.form(action = routes.CustomerController.update(), 'role -> "form") {
+        <div class="form-group">
+            @helper.inputPassword(changePasswordForm("current_password"), 'class -> "form-control", 'autofocus -> "",
+            '_showConstraints ->
+            false, '_label -> "Nykyinen salasana")
+        </div>
+        <div class="form-group">
+            @helper.inputPassword(changePasswordForm("new_password"), 'class -> "form-control", 'autofocus -> "",
+            '_showConstraints ->
+            false, '_label -> "Uusi salasana")
+        </div>
+        <div class="form-group">
+            @helper.inputPassword(changePasswordForm("new_password_again"), 'class -> "form-control", 'autofocus -> "",
+            '_showConstraints ->
+            false, '_label -> "Uusi salasana uudelleen")
+        </div>
 
-    <button class="btn btn-primary">Muuta salasana</button>
-    }
-</div>
-
-<div>
-    <h3>Poista käyttäjätili</h3>
-
-    @helper.form(action = routes.CustomerController.delete(), 'role -> "form") {
-    <div class="form-group">
-        <label for="password">Syötä salasana</label>
-        <input type="password" name="password" class="form-control">
+        <button class="btn btn-primary">Muuta salasana</button>
+        }
     </div>
 
-    <button class="btn btn-danger" onclick="return confirm('Haluatko varmasti poistaa käyttäjätilisi?')">Poista
-        käyttäjätili
-    </button>
-    }
-</div>
+    <div>
+        <h3>Poista käyttäjätili</h3>
+
+        @helper.form(action = routes.CustomerController.delete(), 'role -> "form") {
+        <div class="form-group">
+            <label for="password">Syötä salasana</label>
+            <input type="password" name="password" class="form-control">
+        </div>
+
+        <button class="btn btn-danger" onclick="return confirm('Haluatko varmasti poistaa käyttäjätilisi?')">Poista
+            käyttäjätili
+        </button>
+        }
+    </div>
 }
