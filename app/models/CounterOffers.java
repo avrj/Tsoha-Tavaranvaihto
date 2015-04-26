@@ -63,7 +63,7 @@ public class CounterOffers {
             result = statement.executeQuery();
 
             if (result.next()) {
-                return result.getLong("COUNT(*)");
+                return result.getLong(1);
             }
 
         } catch (Exception e) {
