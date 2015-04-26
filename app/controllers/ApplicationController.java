@@ -1,7 +1,7 @@
 package controllers;
 
 import models.Customer;
-import models.Items;
+import models.Item;
 import play.data.validation.Constraints;
 import play.db.DB;
 import play.mvc.*;
@@ -9,10 +9,8 @@ import play.mvc.*;
 import java.sql.*;
 
 public class ApplicationController extends Controller {
-    private static Items items = new Items();
-
     public static Result index() {
-        return ok(views.html.index.render(items.getLatestItems(5), items.getMostPopularItems(5)));
+        return ok(views.html.index.render(Item.getLatestItems(5), Item.getMostPopularItems(5)));
     }
 
     public static String getCurrentCustomer() {

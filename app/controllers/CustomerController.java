@@ -30,15 +30,12 @@ public class CustomerController extends Controller {
         if (customer == null)
             return redirect(routes.ItemController.all());
 
-        Items items = new Items();
-        return ok(views.html.customers.show.render(items.getOpenItemsByCustomerId(id), customer));
+        return ok(views.html.customers.show.render(Item.getOpenItemsByCustomerId(id), customer));
     }
 
     @Security.Authenticated(Secured.class)
     public static Result items() {
-        Items items = new Items();
-
-        return ok(views.html.customers.items.render(items.getItemsOpenByCustomerId(Long.parseLong(session().get("customer_id"))), items.getItemsAcceptedByCustomerId(Long.parseLong(session().get("customer_id")))));
+        return ok(views.html.customers.items.render(Item.getItemsOpenByCustomerId(Long.parseLong(session().get("customer_id"))), Item.getItemsAcceptedByCustomerId(Long.parseLong(session().get("customer_id")))));
     }
 
     @Security.Authenticated(Secured.class)
@@ -131,11 +128,11 @@ public class CustomerController extends Controller {
     }
 
     public static Result counterOffers() {
-        return ok(views.html.customers.counteroffers.render(new Items().
+        return ok(views.html.customers.counteroffers.render(Item.
                 getItemsOpenForCustomerCounterOffersByCustomerId(Long.parseLong(session().get("customer_id"))),
-                new Items().
+                Item.
                         getItemsAcceptedForCustomerCounterOffersByCustomerId(Long.parseLong(session().get("customer_id"))),
-                new Items().
+                Item.
                         getItemsClosedForCustomerCounterOffersByCustomerId(Long.parseLong(session().get("customer_id")))));
     }
 
@@ -144,6 +141,6 @@ public class CustomerController extends Controller {
     }
 
     public static Result offers() {
-        return ok(views.html.customers.offers.render(new Items().getItemsOpenForCustomerOffersByCustomerId(Long.parseLong(session().get("customer_id"))), new Items().getItemsAcceptedForCustomerOffersByCustomerId(Long.parseLong(session().get("customer_id")))));
+        return ok(views.html.customers.offers.render(Item.getItemsOpenForCustomerOffersByCustomerId(Long.parseLong(session().get("customer_id"))), Item.getItemsAcceptedForCustomerOffersByCustomerId(Long.parseLong(session().get("customer_id")))));
     }
 }

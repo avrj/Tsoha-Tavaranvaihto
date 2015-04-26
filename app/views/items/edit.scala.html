@@ -1,4 +1,4 @@
-@(id: Long, categories: Seq[(String, String)], newItemForm: Form[ItemForm])
+@(id: Long, categories: Seq[(String, String)], newItemForm: Form[Item])
 
 @layouts.main_template("Tavaranvaihto") {
 <div class="login-panel panel panel-default">
@@ -18,7 +18,7 @@
         </div>
 
         <div class="form-group">
-            @helper.select(newItemForm("category"), categories, 'class -> "form-control", '_showConstraints ->
+            @helper.select(newItemForm("category_id"), categories, 'class -> "form-control", '_showConstraints ->
             false, '_label -> "Kategoria")
         </div>
 

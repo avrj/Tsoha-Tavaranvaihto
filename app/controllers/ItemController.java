@@ -14,17 +14,16 @@ import java.util.List;
  * Created by avrj on 22.3.2015.
  */
 public class ItemController extends Controller {
-    private static Items items = new Items();
 
     public static Result all() {
-        return ok(views.html.items.all.render(items.getOpenItems()));
+        return ok(views.html.items.all.render(Item.getOpenItems()));
     }
 
     public static Result show(Long id) {
         java.util.Date date = new java.util.Date(System.currentTimeMillis());
         java.sql.Timestamp timestamp = new java.sql.Timestamp(date.getTime());
 
-        Item item = items.getItemById(id);
+        Item item = Item.getItemById(id);
         if (item == null)
             return redirect(routes.ItemController.all());
 
@@ -39,7 +38,7 @@ public class ItemController extends Controller {
 
     @Security.Authenticated(Secured.class)
     public static Result edit(Long id) {
-        Item item = items.getItemById(id);
+        Item item = Item.getItemById(id);
 
         if (item.getCustomerId() != Long.parseLong(session().get("customer_id"))) {
             flash("error", "Voit muokata vain omia ilmoituksiasi.");
@@ -49,20 +48,20 @@ public class ItemController extends Controller {
         if (item == null)
             return redirect(routes.ItemController.all());
 
-        Form<ItemForm> newItemForm = Form.form(ItemForm.class);
+        Form<Item> newItemForm = Form.form(Item.class);
 
         java.util.Date date = new java.util.Date(System.currentTimeMillis());
         java.sql.Timestamp timestamp = new java.sql.Timestamp(date.getTime());
 
         /* TODO: NewItemForm <-> Item */
-        Form<ItemForm> filledItemForm = newItemForm.fill(new ItemForm(item.getTitle(), item.getDescription(), item.getVaihdossa()));
+        Form<Item> filledItemForm = newItemForm.fill(new Item(item.getTitle(), item.getDescription(), item.getVaihdossa(), item.getCategoryId()));
 
         return ok(views.html.items.edit.render(id, play.libs.Scala.toSeq(Category.getCategoriesAsScalaTupleList()), filledItemForm));
     }
 
     @Security.Authenticated(Secured.class)
     public static Result update(Long id) {
-        Item cur_item = items.getItemById(id);
+        Item cur_item = Item.getItemById(id);
 
         if (cur_item == null)
             return redirect(routes.ItemController.all());
@@ -72,18 +71,16 @@ public class ItemController extends Controller {
             return redirect(routes.ItemController.show(id));
         }
 
-        Form<ItemForm> itemForm = Form.form(ItemForm.class).bindFromRequest();
+        Form<Item> itemForm = Form.form(Item.class).bindFromRequest();
 
         if (itemForm.hasErrors()) {
             return badRequest(views.html.items.edit.render(id, play.libs.Scala.toSeq(Category.getCategoriesAsScalaTupleList()), itemForm));
         } else {
-            ItemForm item = itemForm.get();
+            Item item = itemForm.get();
             if (item == null)
                 return redirect(routes.ItemController.all());
 
-            int itemStatus = items.updateItem(id, item.category, item.title, item.description, item.vaihdossa);
-
-            if (itemStatus > 0) {
+            if (Item.updateItem(id, item.category_id, item.title, item.description, item.vaihdossa)) {
                 flash("success", "Ilmoituksen tiedot on nyt päivitetty.");
 
                 return redirect(routes.ItemController.show(id));
@@ -97,7 +94,7 @@ public class ItemController extends Controller {
 
     @Security.Authenticated(Secured.class)
     public static Result delete(Long id) {
-        Item item = items.getItemById(id);
+        Item item = Item.getItemById(id);
 
         if (item == null)
             return redirect(routes.ItemController.all());
@@ -110,7 +107,7 @@ public class ItemController extends Controller {
         /*
             TODO: must belong to current user
          */
-        if (items.deleteItem(id) > 0) {
+        if (Item.deleteItem(id)) {
             flash("success", "Ilmoitus poistettu.");
 
             return redirect(routes.ItemController.all());
@@ -127,23 +124,23 @@ public class ItemController extends Controller {
 
     @Security.Authenticated(Secured.class)
     public static Result new_item() {
-        Form<ItemForm> newItemForm = Form.form(ItemForm.class);
+        Form<Item> newItemForm = Form.form(Item.class);
 
         return ok(views.html.items.add.render(play.libs.Scala.toSeq(Category.getCategoriesAsScalaTupleList()), newItemForm));
     }
 
     @Security.Authenticated(Secured.class)
     public static Result create() {
-        Form<ItemForm> newItemForm = Form.form(ItemForm.class).bindFromRequest();
+        Form<Item> newItemForm = Form.form(Item.class).bindFromRequest();
 
         if (newItemForm.hasErrors()) {
             return badRequest(views.html.items.add.render(play.libs.Scala.toSeq(Category.getCategoriesAsScalaTupleList()), newItemForm));
         } else {
-            ItemForm item = newItemForm.get();
+            Item item = newItemForm.get();
 
-            int itemStatus = items.createItem(Integer.parseInt(session().get("customer_id")), item.category, item.title, item.description, item.vaihdossa);
+            Item newItem = new Item(Long.parseLong(session().get("customer_id")), item.category_id, item.title, item.description, item.vaihdossa);
 
-            if (itemStatus > 0) {
+            if (newItem.save()) {
                 flash("success", "Ilmoitus lisätty!");
 
                 return redirect(routes.ItemController.all());
@@ -157,7 +154,7 @@ public class ItemController extends Controller {
 
     @Security.Authenticated(Secured.class)
     public static Result lock(Long id) {
-        Item item = items.getItemById(id);
+        Item item = Item.getItemById(id);
 
         if (item == null)
             return redirect(routes.ItemController.all());
@@ -170,7 +167,7 @@ public class ItemController extends Controller {
         /*
             TODO: customer cannot lock item that is already locked
          */
-        if (items.lockItem(id, Long.parseLong(session().get("customer_id"))) > 0) {
+        if (Item.lockItem(id, Long.parseLong(session().get("customer_id")))) {
             flash("success", "Ilmoitus lukittu.");
 
             return redirect(routes.ItemController.show(id));
@@ -187,7 +184,7 @@ public class ItemController extends Controller {
 
     @Security.Authenticated(Secured.class)
     public static Result unlock(Long id) {
-        Item item = items.getItemById(id);
+        Item item = Item.getItemById(id);
 
         if (item == null)
             return redirect(routes.ItemController.all());
@@ -195,7 +192,7 @@ public class ItemController extends Controller {
         /*
             TODO: customer cannot unlock item that belongs to another customer
          */
-        if (items.unlockItem(id) > 0) {
+        if (Item.unlockItem(id)) {
             flash("success", "Ilmoituksen lukitus poistettu.");
 
             return redirect(routes.ItemController.show(id));
@@ -212,12 +209,12 @@ public class ItemController extends Controller {
 
     @Security.Authenticated(Secured.class)
     public static Result acceptOffer(Long id) {
-        Item item = items.getItemById(id);
+        Item item = Item.getItemById(id);
 
         if (item == null)
             return redirect(routes.ItemController.all());
 
-        if (items.acceptOffer(id) > 0) {
+        if (Item.acceptOffer(id)) {
             flash("success", "Tarjous hyväksytty.");
 
             return redirect(routes.ItemController.show(id));
@@ -233,6 +230,6 @@ public class ItemController extends Controller {
     }
 
     public static void deleteExpiredOffers() {
-        items.deleteExpiredOffers();
+        Item.deleteExpiredOffers();
     }
 }

@@ -13,13 +13,13 @@ import java.util.List;
  */
 public class CategoryController extends Controller {
     public static Result all() {
-        List<Item> items = new Items().getOpenItems();
+        List<Item> items = Item.getOpenItems();
 
         return ok(views.html.categories.show.render(items, null));
     }
 
     public static Result show(Long id) {
-        List<Item> items = new Items().getOpenItemsByCategoryId(id);
+        List<Item> items = Item.getOpenItemsByCategoryId(id);
 
         if (items.size() == 0)
             return redirect(routes.ItemController.all());

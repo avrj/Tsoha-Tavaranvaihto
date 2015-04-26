@@ -16,7 +16,7 @@ public class CounterOfferController extends Controller {
 
     @Security.Authenticated(Secured.class)
     public static Result add(Long id) {
-        Item item = new Items().getItemById(id);
+        Item item = Item.getItemById(id);
 
         if (item == null)
             return redirect(routes.ItemController.all());
@@ -50,7 +50,7 @@ public class CounterOfferController extends Controller {
 
     @Security.Authenticated(Secured.class)
     public static Result delete(Long id) {
-        Item item = new Items().getItemById(id);
+        Item item = Item.getItemById(id);
 
         if (item == null)
             return redirect(routes.ItemController.all());
