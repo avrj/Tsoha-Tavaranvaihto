@@ -31,7 +31,13 @@ public class ItemController extends Controller {
         Customer customer = Customer.getCustomerById(item.getCustomerId());
         Category category = Category.getCategoryById(item.getCategoryId());
 
-        CounterOffer currentCustomerCounterOffer = CounterOffer.getCounterOfferForItemByCustomerId(id, Long.parseLong(session().get("customer_id")));
+        Long current_customer = null;
+
+        if(session().get("customer_id") != null) {
+            current_customer = Long.parseLong(session().get("customer_id"));
+        }
+
+        CounterOffer currentCustomerCounterOffer = CounterOffer.getCounterOfferForItemByCustomerId(id, current_customer);
         List<CounterOffer> counterOffers = CounterOffer.getCounterOffersForItem(id);
         return ok(views.html.items.show.render(id, item, customer, category, currentCustomerCounterOffer, counterOffers));
     }

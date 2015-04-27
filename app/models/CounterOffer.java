@@ -141,6 +141,9 @@ public class CounterOffer {
     }
 
     public static CounterOffer getCounterOfferForItemByCustomerId(Long item_id, Long customer_id) {
+        if(customer_id == null)
+            return null;
+
         PreparedStatement statement = null;
 
         ResultSet result = null;

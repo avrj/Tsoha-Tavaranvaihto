@@ -3,60 +3,66 @@
 @(id: Long, item: Item, customer: Customer, category: Category, currentCustomerCounterOffer: CounterOffer, counterOffers: List[CounterOffer])
 
 @layouts.template("Tavaranvaihto") {
-@if(item.getCustomerId() == Long.parseLong(session().get("customer_id")) && item.getLockedAtTimestamp() != null) {
-<div class="alert alert-info" role="alert">
-    @if(item.getAcceptedOfferAtTimestamp() == null) {
-    <span class="glyphicon glyphicon-lock"></span> Käyttäjä <strong><a
-        href="@routes.CustomerController.show(item.getLockedCustomerId())">@item.getLockedCustomer().getUsername()</a> (<a
-        href="mailto:@item.getLockedCustomer().getEmail()">@item.getLockedCustomer().getEmail()</a>)</strong> on
-    lukinnut tämän tarjouksen <strong>@item.getLockedAtTimestamp()</strong>. Lukitus tullaan poistamaan <strong>@item.getLockExpiresAtTimestamp()</strong>.
-    <div class="row">
-        <div class="col-md4 col-sm-4">
-            @helper.form(action = routes.ItemController.acceptOffer(item.getId())) {
-            <button class="btn btn-success" onclick="return confirm('Hyväksytäänkö tarjous?')">Hyväksy tarjous</button>
-            }
+@if(session().get("customer_id")) {
+    @if(item.getCustomerId() == Long.parseLong(session().get("customer_id")) && item.getLockedAtTimestamp() != null) {
+    <div class="alert alert-info" role="alert">
+        @if(item.getAcceptedOfferAtTimestamp() == null) {
+        <span class="glyphicon glyphicon-lock"></span> Käyttäjä <strong><a
+            href="@routes.CustomerController.show(item.getLockedCustomerId())">@item.getLockedCustomer().getUsername()</a> (<a
+            href="mailto:@item.getLockedCustomer().getEmail()">@item.getLockedCustomer().getEmail()</a>)</strong> on
+        lukinnut tämän tarjouksen <strong>@item.getLockedAtTimestamp()</strong>. Lukitus tullaan poistamaan <strong>@item.getLockExpiresAtTimestamp()</strong>.
+        <div class="row">
+            <div class="col-md4 col-sm-4">
+                @helper.form(action = routes.ItemController.acceptOffer(item.getId())) {
+                <button class="btn btn-success" onclick="return confirm('Hyväksytäänkö tarjous?')">Hyväksy tarjous</button>
+                }
+            </div>
+            <div class="col-md-4 col-sm-4">
+                @helper.form(action = routes.ItemController.unlock(item.getId())) {
+                <button class="btn btn-danger" onclick="return confirm('Poistetaanko lukitus?')">Poista lukitus</button>
+                }
+            </div>
         </div>
-        <div class="col-md-4 col-sm-4">
-            @helper.form(action = routes.ItemController.unlock(item.getId())) {
-            <button class="btn btn-danger" onclick="return confirm('Poistetaanko lukitus?')">Poista lukitus</button>
-            }
-        </div>
+        } else {
+        <p><span class="glyphicon glyphicon-ok"></span> Hyväksyit käyttäjän <strong><a
+                href="@routes.CustomerController.show(item.getLockedCustomerId())">@item.getLockedCustomer().getUsername()</a>
+            (<a href="mailto:@item.getAcceptedOfferCustomer().getEmail()">@item.getAcceptedOfferCustomer().getEmail()</a>)</strong>
+            tekemän tarjouksen <strong>@item.getAcceptedOfferAtTimestampFormatted()</strong></p>
+        }
     </div>
-    } else {
-    <p><span class="glyphicon glyphicon-ok"></span> Hyväksyit käyttäjän <strong><a
-            href="@routes.CustomerController.show(item.getLockedCustomerId())">@item.getLockedCustomer().getUsername()</a>
-        (<a href="mailto:@item.getAcceptedOfferCustomer().getEmail()">@item.getAcceptedOfferCustomer().getEmail()</a>)</strong>
-        tekemän tarjouksen <strong>@item.getAcceptedOfferAtTimestampFormatted()</strong></p>
     }
-</div>
-}
 
 @if(item.getCustomerId() != Long.parseLong(session().get("customer_id")) && item.getAcceptedOfferAtTimestamp() != null) {
-        <div class="alert alert-info" role="alert">
-        @if(item.getLockedAtTimestamp != null) {
-            <p><span class="glyphicon glyphicon-ok"></span> Käyttäjä <strong><a
+<div class="alert alert-info" role="alert">
+    @if(item.getLockedAtTimestamp != null) {
+    <p><span class="glyphicon glyphicon-ok"></span> Käyttäjä <strong><a
             href="@routes.CustomerController.show(item.getCustomerId())">@customer.getUsername()</a> (<a
             href="mailto:@customer.getEmail()">@customer.getEmail()</a>)</strong>
-                on hyväksynyt tarjouksesi <strong>@item.getAcceptedOfferAtTimestampFormatted()</strong>
-            </p>
-        } else {
-            <p><span class="glyphicon glyphicon-ok"></span> Käyttäjä <strong><a
+        on hyväksynyt tarjouksesi <strong>@item.getAcceptedOfferAtTimestampFormatted()</strong>
+    </p>
+    } else {
+    <p><span class="glyphicon glyphicon-ok"></span> Käyttäjä <strong><a
             href="@routes.CustomerController.show(item.getCustomerId())">@customer.getUsername()</a> (<a
             href="mailto:@customer.getEmail()">@customer.getEmail()</a>)</strong>
-                on hyväksynyt vastatarjouksesi "@CounterOffer.getCounterOfferForItemByCustomerId(item.getId(), item.getAcceptedOfferCustomerId()).getDescription()" <strong>@item.getAcceptedOfferAtTimestampFormatted()</strong>
-            </p>
-        }
-        </div>
+        on hyväksynyt vastatarjouksesi "@CounterOffer.getCounterOfferForItemByCustomerId(item.getId(),
+        item.getAcceptedOfferCustomerId()).getDescription()"
+        <strong>@item.getAcceptedOfferAtTimestampFormatted()</strong>
+    </p>
+    }
+</div>
 }
 
-    @if(item.getCustomerId() == Long.parseLong(session().get("customer_id")) && item.getLockedAtTimestamp() == null && item.getAcceptedOfferAtTimestamp() != null) {
-        <div class="alert alert-info" role="alert">
-        <p><span class="glyphicon glyphicon-ok"></span> Hyväksyit käyttäjän <strong><a
-        href="@routes.CustomerController.show(item.getAcceptedOfferCustomerId())">@item.getAcceptedOfferCustomer().getUsername()</a>
-            (<a href="mailto:@item.getAcceptedOfferCustomer().getEmail()">@item.getAcceptedOfferCustomer().getEmail()</a>)</strong>
-            tekemän vastatarjouksen "@CounterOffer.getCounterOfferForItemByCustomerId(item.getId(), item.getAcceptedOfferCustomerId()).getDescription()" <strong>@item.getAcceptedOfferAtTimestampFormatted()</strong></p>
+@if(item.getCustomerId() == Long.parseLong(session().get("customer_id")) && item.getLockedAtTimestamp() == null && item.getAcceptedOfferAtTimestamp() != null) {
+<div class="alert alert-info" role="alert">
+    <p><span class="glyphicon glyphicon-ok"></span> Hyväksyit käyttäjän <strong><a
+            href="@routes.CustomerController.show(item.getAcceptedOfferCustomerId())">@item.getAcceptedOfferCustomer().getUsername()</a>
+        (<a href="mailto:@item.getAcceptedOfferCustomer().getEmail()">@item.getAcceptedOfferCustomer().getEmail()</a>)</strong>
+        tekemän vastatarjouksen "@CounterOffer.getCounterOfferForItemByCustomerId(item.getId(),
+        item.getAcceptedOfferCustomerId()).getDescription()"
+        <strong>@item.getAcceptedOfferAtTimestampFormatted()</strong></p>
 </div>
-    }
+}
+}
 <div class="row">
     <div class="col-md-6">
         <h2>@item.getTitle()</h2>
@@ -77,7 +83,7 @@
         <h3>Vastatarjoukset</h3>
 
         <p>@item.getCounterOffersCount()</p>
-
+    @if(session().get("customer_id")) {
         @if(item.getCustomerId() != Long.parseLong(session().get("customer_id")) && item.getLockedAtTimestamp() ==
         null && currentCustomerCounterOffer == null) {
         @if(item.getVaihdossa != "") {
@@ -98,7 +104,8 @@
         }
         }
         @if(item.getCustomerId() != Long.parseLong(session().get("customer_id")) && item.getLockedAtTimestamp() !=
-        null && currentCustomerCounterOffer == null && item.getLockedCustomerId() != Long.parseLong(session().get("customer_id"))) {
+        null && currentCustomerCounterOffer == null && item.getLockedCustomerId() !=
+        Long.parseLong(session().get("customer_id"))) {
         <p>Kohde on tilapäisesti lukittu. Voit kuitenkin tehdä vastarjouksen kohteesta.</p>
         @helper.form(action = routes.CounterOfferController.add(id), 'role -> "form") {
         <div class="input-group">
@@ -126,17 +133,18 @@
                 </td>
                 <td>
                     @if(item.getAcceptedOfferAtTimestamp() == null) {
-                        @helper.form(action = routes.CounterOfferController.accept(counterOffer.getItemId())) {
-                        <input type="hidden" name="customer_id" value="@counterOffer.getCustomerId()" />
-                        <button class="btn btn-success" onclick="return confirm('Hyväksytäänkö vastatarjous?')">Hyväksy
-                        </button>
-                        }
+                    @helper.form(action = routes.CounterOfferController.accept(counterOffer.getItemId())) {
+                    <input type="hidden" name="customer_id" value="@counterOffer.getCustomerId()"/>
+                    <button class="btn btn-success" onclick="return confirm('Hyväksytäänkö vastatarjous?')">Hyväksy
+                    </button>
+                    }
                     }
                 </td>
             </tr>
             }
             </tbody>
         </table>
+        }
         }
     </div>
 </div>
@@ -153,46 +161,48 @@
         <p>@item.getTimestampFormatted()</p>
     </div>
 </div>
-@if(item.getCustomerId() == Long.parseLong(session().get("customer_id"))) {
-@if(item.getAcceptedOfferAtTimestamp() == null) {
-<p><a href="@routes.ItemController.edit(item.getId())" class="btn btn-primary">Muokkaa ilmoitusta</a></p>
-@helper.form(action = routes.ItemController.delete(item.getId())) {
-<button class="btn btn-danger" onclick="return confirm('Haluatko varmasti poistaa ilmoituksen?')">Poista ilmoitus
-</button>
-}
-}
-} else {
-@if(currentCustomerCounterOffer == null) {
-    @if(item.getLockedAtTimestamp() != null) {
-    @if(item.getLockedCustomerId() == Long.parseLong(session().get("customer_id"))) {
-    @if(item.getAcceptedOfferAtTimestamp() == null) {
-    <div class="alert alert-info" role="alert">
-        <p><span class="glyphicon glyphicon-lock"></span> Olet lukinnut tarjouksen
-            <strong>@item.getLockedAtTimestamp()</strong>. Lukitus tullaan poistamaan <strong>@item.getLockExpiresAtTimestamp()</strong>.
-        </p>
-
-        <p>Kohteen ilmoittajan yhteystiedot: <a href="mailto:@customer.getEmail()">@customer.getEmail()</a></p>
-        @helper.form(action = routes.ItemController.unlock(item.getId())) {
-        <button class="btn btn-danger" onclick="return confirm('Poistetaanko lukitus?')">Poista lukitus</button>
+@if(session().get("customer_id")) {
+    @if(item.getCustomerId() == Long.parseLong(session().get("customer_id"))) {
+        @if(item.getAcceptedOfferAtTimestamp() == null) {
+            <p><a href="@routes.ItemController.edit(item.getId())" class="btn btn-primary">Muokkaa ilmoitusta</a></p>
+            @helper.form(action = routes.ItemController.delete(item.getId())) {
+            <button class="btn btn-danger" onclick="return confirm('Haluatko varmasti poistaa ilmoituksen?')">Poista ilmoitus
+            </button>
+            }
         }
-    </div>
-    }
-    }
-    }
-} else {
-    @if(item.getAcceptedOfferCustomerId() != Long.parseLong(session().get("customer_id"))) {
-<div class="alert alert-info" role="alert">
-    <p>Olet tehnyt vastarjouksen "@currentCustomerCounterOffer.getDescription()" tästä kohteesta.</p>
-    @helper.form(action = routes.CounterOfferController.delete(item.getId())) {
-    <button class="btn btn-danger" onclick="return confirm('Haluatko varmasti perua vastatarjouksesi?')">Peru
-        vastatarjous
-    </button>
-    }
-</div>
-    }
-}
+    } else {
+        @if(currentCustomerCounterOffer == null) {
+            @if(item.getLockedAtTimestamp() != null) {
+                @if(item.getLockedCustomerId() == Long.parseLong(session().get("customer_id"))) {
+                    @if(item.getAcceptedOfferAtTimestamp() == null) {
+                    <div class="alert alert-info" role="alert">
+                        <p><span class="glyphicon glyphicon-lock"></span> Olet lukinnut tarjouksen
+                            <strong>@item.getLockedAtTimestamp()</strong>. Lukitus tullaan poistamaan <strong>@item.getLockExpiresAtTimestamp()</strong>.
+                        </p>
 
-<br/>
+                        <p>Kohteen ilmoittajan yhteystiedot: <a href="mailto:@customer.getEmail()">@customer.getEmail()</a></p>
+                        @helper.form(action = routes.ItemController.unlock(item.getId())) {
+                        <button class="btn btn-danger" onclick="return confirm('Poistetaanko lukitus?')">Poista lukitus</button>
+                        }
+                    </div>
+                    }
+                }
+            }
+        } else {
+            @if(item.getAcceptedOfferCustomerId() != Long.parseLong(session().get("customer_id"))) {
+            <div class="alert alert-info" role="alert">
+                <p>Olet tehnyt vastarjouksen "@currentCustomerCounterOffer.getDescription()" tästä kohteesta.</p>
+                @helper.form(action = routes.CounterOfferController.delete(item.getId())) {
+                <button class="btn btn-danger" onclick="return confirm('Haluatko varmasti perua vastatarjouksesi?')">Peru
+                    vastatarjous
+                </button>
+                }
+            </div>
+            }
+        }
+
+    <br/>
+    }
 }
 
 <p><a href="@routes.ItemController.all()">Takaisin tavaralistaukseen</a></p>
