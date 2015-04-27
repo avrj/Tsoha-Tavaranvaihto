@@ -277,8 +277,9 @@ public class Item {
 
         ResultSet result = null;
 
-        String sql = "SELECT id, customer_id, category_id, title, description, vaihdossa, created_at, locked_at, locked_customer_id, accepted_offer_at, accepted_customer_id FROM Item WHERE accepted_offer_at IS NULL ORDER BY created_at DESC LIMIT " + count + ";";
-
+        String sql = "SELECT item.id, item.customer_id, item.category_id, item.title, item.description, item.vaihdossa, item.created_at, item.locked_at, item.locked_customer_id, item.accepted_offer_at, item.accepted_customer_id, " +
+                "count(counteroffer.item_id) as lkm " +
+                "FROM Item left outer join counteroffer on item.id = counteroffer.item_id  WHERE item.accepted_offer_at IS NULL group by item.id order by lkm desc LIMIT " + count + ";";
         try {
             statement = connection.prepareStatement(sql);
 
