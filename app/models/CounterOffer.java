@@ -243,4 +243,40 @@ public class CounterOffer {
 
         return counterOffers;
     }
+
+    public static boolean acceptCounterOffer(Long item_id, Long customer_id) {
+        String sql = "UPDATE Item SET locked_at = NULL, locked_customer_id = NULL, accepted_offer_at = ?, accepted_customer_id = ? WHERE id = ?;";
+
+        PreparedStatement statement = null;
+
+        int result = 0;
+
+        try {
+            statement = connection.prepareStatement(sql);
+
+            java.util.Date date = new java.util.Date(System.currentTimeMillis());
+            java.sql.Timestamp timestamp = new java.sql.Timestamp(date.getTime());
+
+            statement.setTimestamp(1, timestamp);
+
+            statement.setLong(2, customer_id);
+
+            statement.setLong(3, item_id);
+
+            result = statement.executeUpdate();
+        } catch (Exception e) {
+            Logger.error(e.toString());
+        }
+
+        try {
+            statement.close();
+        } catch (SQLException e) {
+            Logger.error(e.toString());
+        }
+
+        if(result > 0)
+            return true;
+        else
+            return false;
+    }
 }

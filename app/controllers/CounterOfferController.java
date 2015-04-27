@@ -76,9 +76,26 @@ public class CounterOfferController extends Controller {
 
     @Security.Authenticated(Secured.class)
     public static Result accept(Long item_id) {
+        Item item = Item.getItemById(item_id);
+
+        if (item == null)
+            return redirect(routes.ItemController.all());
+
         DynamicForm requestData = Form.form().bindFromRequest();
         Long customer_id = Long.parseLong(requestData.get("customer_id"));
 
-        return ok();
+        if (CounterOffer.acceptCounterOffer(item_id, customer_id)) {
+            flash("success", "Vastatarjous hyväksytty.");
+
+            return redirect(routes.ItemController.show(item_id));
+        } else {
+            flash("error", "Vastatarjouksen hyväksyminen epäonnistui.");
+
+            Customer customer = Customer.getCustomerById(item.getCustomerId());
+            Category category = Category.getCategoryById(item.getCategoryId());
+            CounterOffer currentCustomerCounterOffer = CounterOffer.getCounterOfferForItemByCustomerId(item_id, Long.parseLong(session().get("customer_id")));
+            List<CounterOffer> counterOffers = CounterOffer.getCounterOffersForItem(item_id);
+            return ok(views.html.items.show.render(item_id, item, customer, category, currentCustomerCounterOffer, counterOffers));
+        }
     }
 }
