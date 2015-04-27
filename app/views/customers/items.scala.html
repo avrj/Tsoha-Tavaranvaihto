@@ -34,7 +34,7 @@
                 @if(item.getLockedAtTimestamp() == null) {
                 <td><a href="@routes.ItemController.show(item.getId())">@item.getTitle()</a></td>
                 } else {
-                @if(item.getAcceptedOfferAt() == null) {
+                @if(item.getAcceptedOfferAtTimestamp() == null) {
                 <td><a href="@routes.ItemController.show(item.getId())"><span class="glyphicon glyphicon-lock"></span>
                     @item.getTitle()</a></td>
                 } else {
@@ -45,7 +45,7 @@
 
                 <td><a href="@routes.CategoryController.show(item.getCategoryId())">@Category.getCategoryById(item.getCategoryId()).getTitle()</a></td>
                 <td>@item.getCounterOffersCount()</td>
-                <td>@item.getTimestamp()</td>
+                <td>@item.getTimestampFormatted()</td>
             </tr>
             }
             </tbody>
@@ -70,7 +70,7 @@
                 @if(item.getLockedAtTimestamp() == null) {
                 <td><a href="@routes.ItemController.show(item.getId())">@item.getTitle()</a></td>
                 } else {
-                @if(item.getAcceptedOfferAt() == null) {
+                @if(item.getAcceptedOfferAtTimestamp() == null) {
                 <td><a href="@routes.ItemController.show(item.getId())"><span class="glyphicon glyphicon-lock"></span>
                     @item.getTitle()</a></td>
                 } else {
@@ -81,7 +81,7 @@
 
                 <td><a href="@routes.CategoryController.show(item.getCategoryId())">@Category.getCategoryById(item.getCategoryId()).getTitle()</a></td>
                 <td>@item.getCounterOffersCount()</td>
-                <td>@item.getTimestamp()</td>
+                <td>@item.getTimestampFormatted()</td>
             </tr>
             }
             </tbody>

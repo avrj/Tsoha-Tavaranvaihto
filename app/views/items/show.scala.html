@@ -3,9 +3,9 @@
 @(id: Long, item: Item, customer: Customer, category: Category, currentCustomerCounterOffer: CounterOffer, counterOffers: List[CounterOffer])
 
 @layouts.template("Tavaranvaihto") {
-@if(item.getCustomerId() == Integer.parseInt(session().get("customer_id")) && item.getLockedAtTimestamp() != null) {
+@if(item.getCustomerId() == Long.parseLong(session().get("customer_id")) && item.getLockedAtTimestamp() != null) {
 <div class="alert alert-info" role="alert">
-    @if(item.getAcceptedOfferAt == null) {
+    @if(item.getAcceptedOfferAtTimestamp() == null) {
     <span class="glyphicon glyphicon-lock"></span> Käyttäjä <strong><a
         href="@routes.CustomerController.show(item.getLockedCustomerId())">@item.getLockedCustomer().getUsername()</a> (<a
         href="mailto:@item.getLockedCustomer().getEmail()">@item.getLockedCustomer().getEmail()</a>)</strong> on
@@ -26,35 +26,35 @@
     <p><span class="glyphicon glyphicon-ok"></span> Hyväksyit käyttäjän <strong><a
             href="@routes.CustomerController.show(item.getLockedCustomerId())">@item.getLockedCustomer().getUsername()</a>
         (<a href="mailto:@item.getAcceptedOfferCustomer().getEmail()">@item.getAcceptedOfferCustomer().getEmail()</a>)</strong>
-        tekemän tarjouksen <strong>@item.getAcceptedOfferAt()</strong></p>
+        tekemän tarjouksen <strong>@item.getAcceptedOfferAtTimestampFormatted()</strong></p>
     }
 </div>
 }
 
-@if(item.getCustomerId() != Integer.parseInt(session().get("customer_id")) && item.getAcceptedOfferAt() != null) {
+@if(item.getCustomerId() != Long.parseLong(session().get("customer_id")) && item.getAcceptedOfferAtTimestamp() != null) {
         <div class="alert alert-info" role="alert">
         @if(item.getLockedAtTimestamp != null) {
             <p><span class="glyphicon glyphicon-ok"></span> Käyttäjä <strong><a
             href="@routes.CustomerController.show(item.getCustomerId())">@customer.getUsername()</a> (<a
             href="mailto:@customer.getEmail()">@customer.getEmail()</a>)</strong>
-                on hyväksynyt tarjouksesi <strong>@item.getAcceptedOfferAt()</strong>
+                on hyväksynyt tarjouksesi <strong>@item.getAcceptedOfferAtTimestampFormatted()</strong>
             </p>
         } else {
             <p><span class="glyphicon glyphicon-ok"></span> Käyttäjä <strong><a
             href="@routes.CustomerController.show(item.getCustomerId())">@customer.getUsername()</a> (<a
             href="mailto:@customer.getEmail()">@customer.getEmail()</a>)</strong>
-                on hyväksynyt vastatarjouksesi "@CounterOffer.getCounterOfferForItemByCustomerId(item.getId(), item.getAcceptedOfferCustomerId()).getDescription()" <strong>@item.getAcceptedOfferAt()</strong>
+                on hyväksynyt vastatarjouksesi "@CounterOffer.getCounterOfferForItemByCustomerId(item.getId(), item.getAcceptedOfferCustomerId()).getDescription()" <strong>@item.getAcceptedOfferAtTimestampFormatted()</strong>
             </p>
         }
         </div>
 }
 
-    @if(item.getCustomerId() == Integer.parseInt(session().get("customer_id")) && item.getLockedAtTimestamp() == null && item.getAcceptedOfferAt() != null) {
+    @if(item.getCustomerId() == Long.parseLong(session().get("customer_id")) && item.getLockedAtTimestamp() == null && item.getAcceptedOfferAtTimestamp() != null) {
         <div class="alert alert-info" role="alert">
         <p><span class="glyphicon glyphicon-ok"></span> Hyväksyit käyttäjän <strong><a
         href="@routes.CustomerController.show(item.getAcceptedOfferCustomerId())">@item.getAcceptedOfferCustomer().getUsername()</a>
             (<a href="mailto:@item.getAcceptedOfferCustomer().getEmail()">@item.getAcceptedOfferCustomer().getEmail()</a>)</strong>
-            tekemän vastatarjouksen "@CounterOffer.getCounterOfferForItemByCustomerId(item.getId(), item.getAcceptedOfferCustomerId()).getDescription()" <strong>@item.getAcceptedOfferAt()</strong></p>
+            tekemän vastatarjouksen "@CounterOffer.getCounterOfferForItemByCustomerId(item.getId(), item.getAcceptedOfferCustomerId()).getDescription()" <strong>@item.getAcceptedOfferAtTimestampFormatted()</strong></p>
 </div>
     }
 <div class="row">
@@ -78,7 +78,7 @@
 
         <p>@item.getCounterOffersCount()</p>
 
-        @if(item.getCustomerId() != Integer.parseInt(session().get("customer_id")) && item.getLockedAtTimestamp() ==
+        @if(item.getCustomerId() != Long.parseLong(session().get("customer_id")) && item.getLockedAtTimestamp() ==
         null && currentCustomerCounterOffer == null) {
         @if(item.getVaihdossa != "") {
         @helper.form(action = routes.ItemController.lock(item.getId())) {
@@ -97,8 +97,8 @@
         </div>
         }
         }
-        @if(item.getCustomerId() != Integer.parseInt(session().get("customer_id")) && item.getLockedAtTimestamp() !=
-        null && currentCustomerCounterOffer == null && item.getLockedCustomerId() != Integer.parseInt(session().get("customer_id"))) {
+        @if(item.getCustomerId() != Long.parseLong(session().get("customer_id")) && item.getLockedAtTimestamp() !=
+        null && currentCustomerCounterOffer == null && item.getLockedCustomerId() != Long.parseLong(session().get("customer_id"))) {
         <p>Kohde on tilapäisesti lukittu. Voit kuitenkin tehdä vastarjouksen kohteesta.</p>
         @helper.form(action = routes.CounterOfferController.add(id), 'role -> "form") {
         <div class="input-group">
@@ -109,7 +109,7 @@
         </div>
         }
         }
-        @if(item.getCustomerId() == Integer.parseInt(session().get("customer_id"))) {
+        @if(item.getCustomerId() == Long.parseLong(session().get("customer_id"))) {
         <table class="table table-striped">
             <thead>
             <tr>
@@ -125,7 +125,7 @@
                 <td><a href="@routes.CustomerController.show(counterOffer.getCustomerId())">@counterOffer.getCustomer().getUsername()</a>
                 </td>
                 <td>
-                    @if(item.getAcceptedOfferAt() == null) {
+                    @if(item.getAcceptedOfferAtTimestamp() == null) {
                         @helper.form(action = routes.CounterOfferController.accept(counterOffer.getItemId())) {
                         <input type="hidden" name="customer_id" value="@counterOffer.getCustomerId()" />
                         <button class="btn btn-success" onclick="return confirm('Hyväksytäänkö vastatarjous?')">Hyväksy
@@ -150,11 +150,11 @@
     <div class="col-md-6">
         <h3>Ilmoitus jätetty</h3>
 
-        <p>@item.getTimestamp()</p>
+        <p>@item.getTimestampFormatted()</p>
     </div>
 </div>
-@if(item.getCustomerId() == Integer.parseInt(session().get("customer_id"))) {
-@if(item.getAcceptedOfferAt == null) {
+@if(item.getCustomerId() == Long.parseLong(session().get("customer_id"))) {
+@if(item.getAcceptedOfferAtTimestamp() == null) {
 <p><a href="@routes.ItemController.edit(item.getId())" class="btn btn-primary">Muokkaa ilmoitusta</a></p>
 @helper.form(action = routes.ItemController.delete(item.getId())) {
 <button class="btn btn-danger" onclick="return confirm('Haluatko varmasti poistaa ilmoituksen?')">Poista ilmoitus
@@ -165,7 +165,7 @@
 @if(currentCustomerCounterOffer == null) {
     @if(item.getLockedAtTimestamp() != null) {
     @if(item.getLockedCustomerId() == Long.parseLong(session().get("customer_id"))) {
-    @if(item.getAcceptedOfferAt == null) {
+    @if(item.getAcceptedOfferAtTimestamp() == null) {
     <div class="alert alert-info" role="alert">
         <p><span class="glyphicon glyphicon-lock"></span> Olet lukinnut tarjouksen
             <strong>@item.getLockedAtTimestamp()</strong>. Lukitus tullaan poistamaan <strong>@item.getLockExpiresAtTimestamp()</strong>.

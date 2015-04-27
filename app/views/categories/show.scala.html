@@ -46,7 +46,7 @@
                 <td><a href="@routes.ItemController.show(item.getId())">@item.getTitle()</a></td>
                 <td>@item.getCounterOffersCount()</td>
                 <td><a href="@routes.CustomerController.show(item.getCustomerId())">@item.getOwner().getUsername()</a></td>
-                <td>@item.getTimestamp()</td>
+                <td>@item.getTimestampFormatted()</td>
             </tr>
             }
             </tbody>

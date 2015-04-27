@@ -26,8 +26,8 @@
         <tr>
             <td><a href="@routes.ItemController.show(item.getCustomerId())">@item.getTitle()</a></td>
             <td><a href="@routes.CategoryController.show(item.getCategoryId())">@Category.getCategoryById(item.getCategoryId()).getTitle()</a></td>
-            <td>0</td>
-            <td>@item.getTimestamp()</td>
+            <td>@item.getCounterOffersCount()</td>
+            <td>@item.getTimestampFormatted()</td>
         </tr>
         }
         </tbody>

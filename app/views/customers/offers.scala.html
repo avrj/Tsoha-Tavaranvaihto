@@ -22,9 +22,9 @@
             <td><a href="@routes.ItemController.show(item.getId())">@item.getTitle()</a></td>
             <td><a href="@routes.CategoryController.show(item.getCategoryId())">@Category.getCategoryById(item.getCategoryId()).getTitle()</a></td>
             <td><a href="@routes.CustomerController.show(item.getCustomerId())">@item.getOwner().getUsername()</a></td>
-            <td>@item.getTimestamp()</td>
-            <td>@item.getLockedAtTimestamp()</td>
-            <td>@item.getLockExpiresAtTimestamp()</td>
+            <td>@item.getTimestampFormatted()</td>
+            <td>@item.getLockedAtTimestampFormatted()</td>
+            <td>@item.getLockExpiresAtTimestampFormatted()</td>
         </tr>
         }
         </tbody>
@@ -47,9 +47,9 @@
             <td><a href="@routes.ItemController.show(item.getId())">@item.getTitle()</a></td>
             <td><a href="@routes.CategoryController.show(item.getCategoryId())">@Category.getCategoryById(item.getCategoryId()).getTitle()</a></td>
             <td><a href="@routes.CustomerController.show(item.getCustomerId())">@item.getOwner().getUsername()</a></td>
-            <td>@item.getTimestamp()</td>
-            <td>@item.getLockedAtTimestamp()</td>
-            <td>@item.getAcceptedOfferAt()</td>
+            <td>@item.getTimestampFormatted()</td>
+            <td>@item.getLockedAtTimestampFormatted()</td>
+            <td>@item.getAcceptedOfferAtTimestampFormatted()</td>
         </tr>
         }
         </tbody>

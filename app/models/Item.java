@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -95,6 +96,8 @@ public class Item {
         return timestamp;
     }
 
+    public String getTimestampFormatted() {return new SimpleDateFormat("dd.MM.yyyy").format(timestamp) + " klo " + new SimpleDateFormat("HH:mm:ss").format(timestamp); }
+
     public Customer getOwner() {
         return Customer.getCustomerById(customer_id);
     }
@@ -111,6 +114,8 @@ public class Item {
         return locked_at_timestamp;
     }
 
+    public String getLockedAtTimestampFormatted() {return new SimpleDateFormat("dd.MM.yyyy").format(locked_at_timestamp) + " klo " + new SimpleDateFormat("HH:mm:ss").format(locked_at_timestamp);}
+
     public java.sql.Timestamp getLockExpiresAtTimestamp() {
         Calendar cal = Calendar.getInstance();
 
@@ -118,6 +123,15 @@ public class Item {
         cal.add(Calendar.DAY_OF_WEEK, 1);
 
         return new java.sql.Timestamp(cal.getTime().getTime());
+    }
+
+    public String getLockExpiresAtTimestampFormatted() {
+        Calendar cal = Calendar.getInstance();
+
+        cal.setTime(locked_at_timestamp);
+        cal.add(Calendar.DAY_OF_WEEK, 1);
+
+        return new SimpleDateFormat("dd.MM.yyyy").format(cal.getTime().getTime()) + " klo " + new SimpleDateFormat("HH:mm:ss").format(cal.getTime().getTime());
     }
 
     public Long getLockedCustomerId() {
@@ -132,12 +146,10 @@ public class Item {
         return accepted_offer_at;
     }
 
+    public String getAcceptedOfferAtTimestampFormatted() { return new SimpleDateFormat("dd.MM.yyyy").format(accepted_offer_at) + " klo " + new SimpleDateFormat("HH:mm:ss").format(accepted_offer_at); }
+
     public Long getAcceptedOfferCustomerId() {
         return accepted_customer_id;
-    }
-
-    public java.sql.Timestamp getAcceptedOfferAt() {
-        return accepted_offer_at;
     }
 
     public Customer getAcceptedOfferCustomer() {
